@@ -71,6 +71,7 @@ public class ServicePoint {
             }
         }
         queues[shortestQueueIndex].add(a);
+        this.queueLengths.add(queues[shortestQueueIndex].toArray().length);    //lisää sen hetkisen jonon listaa
     }
 
     /**
@@ -93,6 +94,7 @@ public class ServicePoint {
         }
         if (longestQueueIndex!=-1 && longestQueue>0) {
             reserved[longestQueueIndex]=false;
+            this.queueLengths.add(queues[longestQueueIndex].toArray().length);    //lisää sen hetkisen jonon listaa
             return queues[longestQueueIndex].poll();
 
         }
