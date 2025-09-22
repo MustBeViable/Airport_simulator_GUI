@@ -56,10 +56,21 @@ public class ServicePoint {
      * @param a Customer to be queued
      */
     public void addQueue(Passenger a) {	// The first customer of the queue is always in service, also added to random line
-        //mitä tää random tekee? arpooks se random jonon mihi lisää passengerin?
-        int choose=rand.nextInt(queues.length);
-        queues[choose].add(a);
-        this.queueLengths.add(queues[choose].toArray().length);   //lisää sen hetkisen jonon listaa
+        int shortestQueue=queues[0].size();
+        int shortestQueueIndex=0;
+        for (int i=0; i<queues.length; i++){
+            int lengthOfQueue=queues[i].size();
+
+            if(lengthOfQueue<shortestQueue){
+                shortestQueue=lengthOfQueue;
+                shortestQueueIndex=i;
+            }
+            if (lengthOfQueue==0) {
+                shortestQueueIndex = i;
+                break;
+            }
+        }
+        queues[shortestQueueIndex].add(a);
     }
 
     /**
@@ -69,12 +80,23 @@ public class ServicePoint {
      * @return Customer retrieved from the waiting queue
      */
     public Passenger removeQueue() {
+        int longestQueue=-1;
+        int longestQueueIndex=-1;
         for (int i=0; i<queues.length; i++){
-            if (!queues[i].isEmpty()){
-                reserved[i] = false;
-                return queues[i].poll();
+            int lengthOfQueue=queues[i].size();
+
+            if(lengthOfQueue>longestQueue){
+                longestQueue=lengthOfQueue;
+                longestQueueIndex=i;
             }
+            System.out.println(lengthOfQueue+"test");
         }
+        if (longestQueueIndex!=-1 && longestQueue>0) {
+            reserved[longestQueueIndex]=false;
+            return queues[longestQueueIndex].poll();
+
+        }
+
         return null;
     }
 
@@ -109,14 +131,13 @@ public class ServicePoint {
      *
      * @return logival value indicating queue status
      */
-    public boolean isOnQueue() {
-        for (LinkedList<Passenger> queue : queues) {
-            if (!queue.isEmpty()) {
-                return true;
-            }
+    public boolean isOnQueue(int lineIndex) {
+        if (!queues[lineIndex].isEmpty()) {
+            return true;
         }
         return false;
     }
+
     public boolean isQueueEmpty(int lineIndex) {
         return queues[lineIndex].isEmpty();
     }

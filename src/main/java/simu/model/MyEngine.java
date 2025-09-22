@@ -214,7 +214,7 @@ public class MyEngine extends Engine {
     protected void tryCEvents() {
         for (ServicePoint p : servicePoints) {
             for (int i = 0; i < p.getLineCount(); i++) {
-                if (!p.isReserved(i) && p.isOnQueue()) {
+                if (!p.isReserved(i) && p.isOnQueue(i)) {
                     p.beginService(i);
                 }
             }
