@@ -11,25 +11,64 @@ public class Passenger {
     private double removalTime;
     private int id;
     private static int i = 1;
-    private static long sum = 0;
+    private static double sum = 0;
     private boolean isPriority;
     private boolean checkIn;
     private boolean luggage;
     private boolean euCitizen;
 
 
+    private static double priorityFraction = 0.2;
+    private static double luggageFraction = 0.7;
+    private static double euCitizenFraction = 0.9;
+    private static double checkInFraction = 0.8;
+
     /**
      * Create a unique
      */
     public Passenger() {
         id = i++;
-        this.isPriority = false;
-        this.checkIn = true;
-        this.luggage = true;
-        this.euCitizen = true;
+        this.isPriority = decideByFraction(priorityFraction, id);
+        this.checkIn = decideByFraction(checkInFraction, id);
+        this.luggage = decideByFraction(luggageFraction, id);
+        this.euCitizen = decideByFraction(euCitizenFraction, id);
         arrivalTime = Clock.getInstance().getTime();
         Trace.out(Trace.Level.INFO, "New  #" + id + " arrived at  " + arrivalTime);
     }
+
+    private static boolean decideByFraction(double fraction, int id) {
+        if (fraction <= 0.0) return false;
+        if (fraction >= 1.0) return true;
+        int cycle=Math.max(1, (int)Math.round(1.0/fraction));
+        return (id % cycle) == 0;
+    }
+
+    public static void setPriorityFraction(double f) {
+        if (f < 0.0 || f > 1.0) throw new IllegalArgumentException("priorityFraction must be between 0.0 and 1.0");
+        priorityFraction = f;
+    }
+
+    public static void setLuggageFraction(double f) {
+        if (f < 0.0 || f > 1.0) throw new IllegalArgumentException("luggageFraction must be between 0.0 and 1.0");
+        luggageFraction = f;
+    }
+
+    public static void setEuCitizenFraction(double f) {
+        if (f < 0.0 || f > 1.0) throw new IllegalArgumentException("euCitizenFraction must be between 0.0 and 1.0");
+        euCitizenFraction = f;
+    }
+
+    public static void setCheckInFraction(double f) {
+        if (f < 0.0 || f > 1.0) throw new IllegalArgumentException("checkInFraction must be between 0.0 and 1.0");
+        checkInFraction = f;
+    }
+
+    public static double getPriorityFraction() { return priorityFraction; }
+    public static double getLuggageFraction() { return luggageFraction; }
+    public static double getEuCitizenFraction() { return euCitizenFraction; }
+    public static double getCheckInFraction() { return checkInFraction; }
+
+
 
     /**
      * Give the time when  has been removed (from the system to be simulated)
