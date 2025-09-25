@@ -152,6 +152,8 @@ public class MyEngine extends Engine {
 
                 // generate next arrival exactly once per ARR1
                 arrivalProcess.generateNext();
+                controller.visualiseCustomer();
+                controller.visualiseCheckIn();// NEW
             }
 
             case CHECK_IN -> {

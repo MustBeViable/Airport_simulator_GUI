@@ -45,6 +45,14 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
 
 	@Override
 	public void visualiseCustomer() {
-		Platform.runLater(() -> ui.getVisualisation().newCustomer());
+		Platform.runLater(() -> {
+            ui.getVisualisation().newCustomer();
+        });
 	}
+
+    public void visualiseCheckIn() {
+        Platform.runLater(() -> {
+            ui.getVisualisation().newCustomerCheckin();
+        });
+    }
 }

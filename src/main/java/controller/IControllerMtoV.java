@@ -4,4 +4,5 @@ package controller;
 public interface IControllerMtoV {
 		public void showEndTime(double time);
 		public void visualiseCustomer();
+        public void visualiseCheckIn();
 }

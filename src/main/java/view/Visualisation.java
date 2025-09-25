@@ -30,4 +30,9 @@ public class Visualisation extends Canvas implements IVisualisation {
 			j += 10;
 		}
 	}
+
+    @Override
+    public void newCustomerCheckin() {
+
+    }
 }
