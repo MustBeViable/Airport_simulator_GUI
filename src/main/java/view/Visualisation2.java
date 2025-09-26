@@ -6,15 +6,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import simu.framework.Event;
 import simu.model.EventType;
 
-import static simu.model.EventType.*;
 
 public class Visualisation2 extends Canvas implements IVisualisation {
     private GraphicsContext gc;
 	int customerCount = 0;
-    private Image canvasBackGround = new Image("/images/canvas_pohja2.png");
 
 	public Visualisation2(int w, int h) {
 		super(w, h);
@@ -203,7 +200,7 @@ public class Visualisation2 extends Canvas implements IVisualisation {
                 coordy0 = 145;
                 break;
             default:
-                System.out.println("lost lamb. Ei pitäs koskaa näkyä tätä printtiä");
+                System.out.println("lost lamb. Ei pitäs koskaa näkyä tätä printtiä.");
                 coordy0 = 0;
                 coordx0 = 0;
         }
