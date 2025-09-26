@@ -4,12 +4,10 @@ import java.text.DecimalFormat;
 import controller.*;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import simu.framework.Trace;
 import simu.framework.Trace.Level;
 import javafx.scene.*;
@@ -18,10 +16,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
 
-import java.text.DecimalFormat;
-
 public class SimulatorGUI extends Application implements ISimulatorUI {
 
+    //Canvas size (i use width as whole and height half of it)
+    private static int canvasSize = 1200;
 	// Controller object (UI needs)
 	private IControllerVtoM controller;
 
@@ -37,7 +35,7 @@ public class SimulatorGUI extends Application implements ISimulatorUI {
 	private Button slowButton;
 	private Button speedUpButton;
 
-	private IVisualisation display;
+	private IVisualisation displayBG, displayAnimation;
 
 
 	@Override
@@ -109,11 +107,13 @@ public class SimulatorGUI extends Application implements ISimulatorUI {
 	        grid.add(speedUpButton, 0, 4);
 	        grid.add(slowButton, 1, 4);
 	        
-	        display = new Visualisation2(400,200);
+	        displayBG = new VisualisationBG(canvasSize,canvasSize/2);
+            displayAnimation = new Visualisation2(canvasSize, canvasSize/2);
+            StackPane animation = new StackPane((Node)displayBG, (Node)displayAnimation);
 			//display = new Visualisation2(400,200);
 
 	        // Fill the box:
-	        hBox.getChildren().addAll(grid, (Canvas) display);
+	        hBox.getChildren().addAll(grid, animation);
 	        
 	        Scene scene = new Scene(hBox);
 	        primaryStage.setScene(scene);
@@ -142,7 +142,7 @@ public class SimulatorGUI extends Application implements ISimulatorUI {
 
 	@Override
 	public IVisualisation getVisualisation() {
-		 return display;
+		 return displayAnimation;
 	}
 
 	/* JavaFX-application (UI) start-up */

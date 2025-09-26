@@ -2,6 +2,7 @@ package controller;
 
 import javafx.application.Platform;
 import simu.framework.IEngine;
+import simu.model.EventType;
 import simu.model.MyEngine;
 import view.ISimulatorUI;
 
@@ -45,6 +46,43 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
 
 	@Override
 	public void visualiseCustomer() {
-		Platform.runLater(() -> ui.getVisualisation().newCustomer());
+		Platform.runLater(() -> {
+            ui.getVisualisation().newCustomer();
+        });
 	}
+
+    public void visualiseCheckIn() {
+        Platform.runLater(() -> {
+            ui.getVisualisation().newCustomerCheckin();
+        });
+    }
+
+    @Override
+    public void visualiseLuggageDrop(double startX, double startY, boolean isPriority) {
+        Platform.runLater(() -> {
+            ui.getVisualisation().newCustomerLuggageDrop(startX, startY, isPriority);
+        });
+    }
+
+    @Override
+    public void visualiseSecurity(boolean isPriority, EventType from) {
+        Platform.runLater(() -> {
+            ui.getVisualisation().customerAnimationToSecurity(isPriority, from);
+        });
+    }
+
+    @Override
+    public void visualisePassport(boolean isPriority, EventType from) {
+        Platform.runLater(() -> {
+            ui.getVisualisation().customerAnimationToPassport(isPriority,from);
+        });
+    }
+
+    @Override
+    public void visualiseGate(EventType from) {
+        Platform.runLater(() -> {
+            ui.getVisualisation().customerAnimationToGate(from);
+        });
+
+    }
 }
