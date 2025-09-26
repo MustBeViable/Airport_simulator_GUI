@@ -8,6 +8,8 @@ import simu.framework.Engine;
 import simu.framework.Event;
 import java.util.Random;
 
+import static simu.model.EventType.*;
+
 
 public class MyEngine extends Engine {
     private ArrivalProcess arrivalProcess;
@@ -96,7 +98,7 @@ public class MyEngine extends Engine {
             servicePoints[6] = new ServicePoint(serviceTime, eventList, EventType.PASSPORT_CONTROL_PRIORITY,67);
             servicePoints[7] = new ServicePoint(serviceTime, eventList, EventType.GATE,4);
 
-            arrivalProcess = new ArrivalProcess(arrivalTime, eventList, EventType.ARR1);
+            arrivalProcess = new ArrivalProcess(arrivalTime, eventList, ARR1);
         } else {
             /* more realistic simulation case with variable customer arrival times and service times */
             servicePoints[0] = new ServicePoint(new LogNormal(2.3, 0.5), eventList, EventType.CHECK_IN,3);
@@ -108,7 +110,7 @@ public class MyEngine extends Engine {
             servicePoints[6] = new ServicePoint(new LogNormal(2.1, 0.7), eventList, EventType.PASSPORT_CONTROL_PRIORITY,66);
             servicePoints[7] = new ServicePoint(new Normal(5, 1), eventList, EventType.GATE,5);
 
-            arrivalProcess = new ArrivalProcess(new Negexp(15, 5), eventList, EventType.ARR1);
+            arrivalProcess = new ArrivalProcess(new Negexp(15, 5), eventList, ARR1);
             /*
             OLI VALMIIKSI KOODISSA MUKANA
 			servicePoints[0] = new ServicePoint(new Normal(10, 6), eventList, EventType.DEP1);
@@ -134,26 +136,30 @@ public class MyEngine extends Engine {
                 if (p.isCheckIn()) {
                     // needs check-in first
                     servicePoints[0].addQueue(p);
+                    controller.visualiseCheckIn();
                 } else if (p.getIsPriority()) {
                     // priority passenger goes to priority luggage or priority security
                     if (p.isLuggage()) {
+                        controller.visualiseLuggageDrop(125,280, p.getIsPriority());
                         servicePoints[2].addQueue(p); // LUGGAGE_DROP_PRIORITY
                     } else {
+                        controller.visualiseSecurity(true, CHECK_IN);
+                        controller.visualiseSecurity(p.getIsPriority(), ARR1);
                         servicePoints[4].addQueue(p); // SECURITY_PRIORITY
                     }
                 } else {
                     // normal passenger: luggage or normal security
                     if (p.isLuggage()) {
+                        controller.visualiseLuggageDrop(125,280, p.getIsPriority());
                         servicePoints[1].addQueue(p); // LUGGAGE_DROP
                     } else {
+                        controller.visualiseSecurity(false, CHECK_IN);
+                        controller.visualiseSecurity(p.getIsPriority(), ARR1);
                         servicePoints[3].addQueue(p); // SECURITY
                     }
                 }
-
-                // generate next arrival exactly once per ARR1
                 arrivalProcess.generateNext();
                 controller.visualiseCustomer();
-                controller.visualiseCheckIn();// NEW
             }
 
             case CHECK_IN -> {
@@ -162,14 +168,18 @@ public class MyEngine extends Engine {
                 // after check-in route based on priority and luggage flag
                 if (p.getIsPriority()) {
                     if (p.isLuggage()) {
+                        controller.visualiseLuggageDrop(375,280, p.getIsPriority());
                         servicePoints[2].addQueue(p); // LUGGAGE_DROP_PRIORITY
                     } else {
+                        controller.visualiseSecurity(p.getIsPriority(), CHECK_IN);
                         servicePoints[4].addQueue(p); // SECURITY_PRIORITY
                     }
                 } else {
                     if (p.isLuggage()) {
+                        controller.visualiseLuggageDrop(375,280, p.getIsPriority());
                         servicePoints[1].addQueue(p); // LUGGAGE_DROP
                     } else {
+                        controller.visualiseSecurity(false, EventType.LUGGAGE_DROP);
                         servicePoints[3].addQueue(p); // SECURITY
                     }
                 }
@@ -179,6 +189,7 @@ public class MyEngine extends Engine {
                 Passenger p = servicePoints[1].removeQueue();
                 if (p == null) break;
                 // after normal luggage, go to normal security
+                controller.visualiseSecurity(false, EventType.LUGGAGE_DROP);
                 servicePoints[3].addQueue(p); // SECURITY
             }
 
@@ -186,6 +197,7 @@ public class MyEngine extends Engine {
                 Passenger p = servicePoints[2].removeQueue();
                 if (p == null) break;
                 // after priority luggage, go to priority security
+                controller.visualiseSecurity(true, EventType.LUGGAGE_DROP_PRIORITY);
                 servicePoints[4].addQueue(p); // SECURITY_PRIORITY
             }
 
@@ -194,8 +206,10 @@ public class MyEngine extends Engine {
                 if (p == null) break;
                 // normal security: if EU -> gate, else -> passport control (non-priority)
                 if (p.isEuCitizen()) {
+                    controller.visualiseGate(SECURITY);
                     servicePoints[7].addQueue(p); // GATE
                 } else {
+                    controller.visualisePassport(false, SECURITY);
                     servicePoints[5].addQueue(p); // PASSPORT_CONTROL
                 }
             }
@@ -205,8 +219,10 @@ public class MyEngine extends Engine {
                 if (p == null) break;
                 // priority security: if EU -> gate, else -> passport control priority
                 if (p.isEuCitizen()) {
+                    controller.visualiseGate(SECURITY_PRIORITY);
                     servicePoints[7].addQueue(p); // GATE
                 } else {
+                    controller.visualisePassport(true, SECURITY_PRIORITY);
                     servicePoints[6].addQueue(p); // PASSPORT_CONTROL_PRIORITY
                 }
             }
@@ -214,12 +230,14 @@ public class MyEngine extends Engine {
             case PASSPORT_CONTROL -> {
                 Passenger p = servicePoints[5].removeQueue();
                 if (p == null) break;
+                controller.visualiseGate(PASSPORT_CONTROL);
                 servicePoints[7].addQueue(p); // GATE
             }
 
             case PASSPORT_CONTROL_PRIORITY -> {
                 Passenger p = servicePoints[6].removeQueue();
                 if (p == null) break;
+                controller.visualiseGate(PASSPORT_CONTROL_PRIORITY);
                 servicePoints[7].addQueue(p); // GATE
             }
 
@@ -227,7 +245,7 @@ public class MyEngine extends Engine {
                 Passenger p = servicePoints[7].removeQueue();
                 if (p == null) break;
                 p.setRemovalTime(Clock.getInstance().getTime());
-                p.reportResults();
+                //p.reportResults();
             }
         }
     }
