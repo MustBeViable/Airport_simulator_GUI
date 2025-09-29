@@ -92,7 +92,6 @@ public class ServicePoint {
                 longestQueue=lengthOfQueue;
                 longestQueueIndex=i;
             }
-            System.out.println(lengthOfQueue+"test");
         }
         if (longestQueueIndex!=-1 && longestQueue>0) {
             reserved[longestQueueIndex]=false;
