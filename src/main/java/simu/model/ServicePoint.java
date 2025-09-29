@@ -16,8 +16,10 @@ public class ServicePoint {
     private EventList eventList;
     private EventType eventTypeScheduled;
     private boolean[] reserved ;
-    private int maxLenght;
-    private int minLength;
+    private int maxLength=Integer.MIN_VALUE;
+    private int minLength=Integer.MAX_VALUE;
+    private long sampleCount=0;
+    private long sampleSum=0;
     private double averageLength;
     //private boolean reserved = false;
 
@@ -45,9 +47,9 @@ public class ServicePoint {
         reserved = new boolean[lineCount];
         for (int i=0; i<lineCount;i++){
             queues[i] = new LinkedList<>();
-            this.queueLengths.add(queues[i].toArray().length);    //lisää sen hetkisen jonon listaa
             reserved[i] = false;
         }
+        sampleAllQueues();
     }
 
     /**
@@ -71,7 +73,7 @@ public class ServicePoint {
             }
         }
         queues[shortestQueueIndex].add(a);
-        this.queueLengths.add(queues[shortestQueueIndex].toArray().length);    //lisää sen hetkisen jonon listaa
+        sampleAllQueues();
     }
 
     /**
@@ -94,7 +96,7 @@ public class ServicePoint {
         }
         if (longestQueueIndex!=-1 && longestQueue>0) {
             reserved[longestQueueIndex]=false;
-            this.queueLengths.add(queues[longestQueueIndex].toArray().length);    //lisää sen hetkisen jonon listaa
+            sampleAllQueues();
             return queues[longestQueueIndex].poll();
 
         }
@@ -115,6 +117,7 @@ public class ServicePoint {
             reserved[lineIndex] = true;
             double serviceTime = generator.sample();
             eventList.add(new Event(eventTypeScheduled, Clock.getInstance().getTime() + serviceTime));
+            sampleAllQueues();
 
         }
     }
@@ -167,13 +170,26 @@ public class ServicePoint {
                 longest =  length;
             }
         }
-        this.maxLenght = longest;
+        this.maxLength = longest;
         this.minLength = shortest;
         this.averageLength = (double) sum / queueLengths.size();
     }
 
-    public int getMaxLenght() {
-        return maxLenght;
+    private void recordQueueLength(int length){
+        sampleSum+=length;
+        sampleCount++;
+        if (length>maxLength){
+            maxLength=length;
+        }
+        if (length<minLength){
+            minLength=length;
+        }
+    }
+
+    public void sampleAllQueues(){
+        for (LinkedList<Passenger>q:queues){
+            recordQueueLength(q.size());
+        }
     }
 
     public int getLineCount() {
@@ -181,12 +197,28 @@ public class ServicePoint {
     }
 
     public int getMinLength() {
-        return minLength;
+        if (minLength == Integer.MAX_VALUE) {
+            return 0;
+        } else {
+            return minLength;
+        }
+    }
+
+    public int getMaxLength() {
+        if (maxLength == Integer.MIN_VALUE) {
+            return 0;
+        } else {
+            return maxLength;
+        }
     }
 
     public double getAverageLength() {
-        return averageLength;
+        if (sampleCount==0){
+            return 0.0;}
+        else{
+            return (double) sampleSum/sampleCount;}
     }
+
 
 }
 /**

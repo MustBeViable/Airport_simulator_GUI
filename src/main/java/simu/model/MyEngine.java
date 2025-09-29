@@ -263,9 +263,6 @@ public class MyEngine extends Engine {
 
     @Override
     protected void results() {
-        for (ServicePoint serv : servicePoints) {
-            serv.findMinMaxLengths();
-        }
 
         System.out.println("=== Simulation results ===");
         System.out.printf("%-8s %-12s %-12s %-12s%n", "Queue", "Max", "Min", "Average");
@@ -273,7 +270,7 @@ public class MyEngine extends Engine {
             ServicePoint s = servicePoints[i];
             System.out.printf("%-8s %-12d %-12d %-12.2f%n",
                     "Queue " + (i + 1),
-                    s.getMaxLenght(),
+                    s.getMaxLength(),
                     s.getMinLength(),
                     s.getAverageLength());
         }
