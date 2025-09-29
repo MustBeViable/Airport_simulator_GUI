@@ -110,7 +110,6 @@ public class SimulatorGUI extends Application implements ISimulatorUI {
 	        displayBG = new VisualisationBG(canvasSize,canvasSize/2);
             displayAnimation = new Visualisation2(canvasSize, canvasSize/2);
             StackPane animation = new StackPane((Node)displayBG, (Node)displayAnimation);
-			//display = new Visualisation2(400,200);
 
 	        // Fill the box:
 	        hBox.getChildren().addAll(grid, animation);
