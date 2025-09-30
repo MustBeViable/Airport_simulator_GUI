@@ -264,6 +264,7 @@ public class MyEngine extends Engine {
     @Override
     protected void results() {
 
+
         System.out.println("=== Simulation results ===");
         System.out.printf("%-8s %-12s %-12s %-12s%n", "Queue", "Max", "Min", "Average");
         for (int i = 0; i < servicePoints.length; i++) {
