@@ -1,11 +1,10 @@
 package simu.entity;
 
 import jakarta.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "run")
-public class Run implements Serializable {
+public class Run {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,4 +39,44 @@ public class Run implements Serializable {
 
     public Run() {}
 
+
+    public Integer getId() {
+        return id;
+    }
+
+    public int getCheckInQueuesCount() {
+        return checkInQueuesCount;
+    }
+
+    public int getLuggageDropCount() {
+        return luggageDropCount;
+    }
+
+    public int getPriorityLuggageDropCount() {
+        return priorityLuggageDropCount;
+    }
+
+    public int getSecurityCount() {
+        return securityCount;
+    }
+
+    public int getPrioritySecurityCount() {
+        return prioritySecurityCount;
+    }
+
+    public int getPassportControlCount() {
+        return passportControlCount;
+    }
+
+    public int getPriorityPassportControlCount() {
+        return priorityPassportControlCount;
+    }
+
+    public int getGateCount() {
+        return gateCount;
+    }
+
+    public RunStatistics getStatistics() {
+        return statistics;
+    }
 }
