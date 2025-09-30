@@ -19,49 +19,49 @@ public class RunStatistics {
     @Column(name = "check_in_queue_max_length", nullable = false)
     private int checkInQueueMaxLength;
 
-    @Column(name = "check_in_queue_average_length", precision = 10, scale = 3, nullable = false)
+    @Column(name = "check_in_queue_average_length", nullable = false)
     private double checkInQueueAverageLength;
 
     @Column(name = "luggage_drop_queue_max_length", nullable = false)
     private int luggageDropQueueMaxLength;
 
-    @Column(name = "luggage_drop_queue_average_length", precision = 10, scale = 3, nullable = false)
+    @Column(name = "luggage_drop_queue_average_length", nullable = false)
     private double luggageDropQueueAverageLength;
 
     @Column(name = "priority_luggage_drop_queue_max_length", nullable = false)
     private int priorityLuggageDropQueueMaxLength;
 
-    @Column(name = "priority_luggage_drop_queue_average_length", precision = 10, scale = 3, nullable = false)
+    @Column(name = "priority_luggage_drop_queue_average_length", nullable = false)
     private double priorityLuggageDropQueueAverageLength;
 
     @Column(name = "security_queue_max_length", nullable = false)
     private int securityQueueMaxLength;
 
-    @Column(name = "security_queue_average_length", precision = 10, scale = 3, nullable = false)
+    @Column(name = "security_queue_average_length", nullable = false)
     private double securityQueueAverageLength;
 
     @Column(name = "priority_security_queue_max_length", nullable = false)
     private int prioritySecurityQueueMaxLength;
 
-    @Column(name = "priority_security_queue_average_length", precision = 10, scale = 3, nullable = false)
+    @Column(name = "priority_security_queue_average_length", nullable = false)
     private double prioritySecurityQueueAverageLength;
 
     @Column(name = "passport_control_queue_max_length", nullable = false)
     private int passportControlQueueMaxLength;
 
-    @Column(name = "passport_control_queue_average_length", precision = 10, scale = 3, nullable = false)
+    @Column(name = "passport_control_queue_average_length", nullable = false)
     private double passportControlQueueAverageLength;
 
     @Column(name = "priority_passport_control_queue_max_length", nullable = false)
     private int priorityPassportControlQueueMaxLength;
 
-    @Column(name = "priority_passport_control_queue_average_length", precision = 10, scale = 3, nullable = false)
+    @Column(name = "priority_passport_control_queue_average_length", nullable = false)
     private double priorityPassportControlQueueAverageLength;
 
     @Column(name = "gate_queue_max_length", nullable = false)
     private int gateQueueMaxLength;
 
-    @Column(name = "gate_queue_average_length", precision = 10, scale = 3, nullable = false)
+    @Column(name = "gate_queue_average_length", nullable = false)
     private double gateQueueAverageLength;
 
     public RunStatistics(Run run, int checkInQueueMaxLength, double checkInQueueAverageLength,
