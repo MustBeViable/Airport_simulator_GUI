@@ -1,4 +1,6 @@
-package view;
+
+// File: `src/main/java/view/SimulatorGUI.java`
+        package view;
 
 import java.text.DecimalFormat;
 import controller.*;
@@ -31,6 +33,7 @@ public class SimulatorGUI extends Application implements ISimulatorUI {
     @FXML private Button startButton;
     @FXML private Button slowButton;
     @FXML private Button speedUpButton;
+    @FXML private Button resetButton; // added
     @FXML private StackPane animationPane;
 
     private IVisualisation displayBG, displayAnimation;
@@ -79,6 +82,22 @@ public class SimulatorGUI extends Application implements ISimulatorUI {
         });
         slowButton.setOnAction(e -> controller.decreaseSpeed());
         speedUpButton.setOnAction(e -> controller.increaseSpeed());
+
+        // Reset button: call controller.resetSimulation() and re-enable Start
+        if (resetButton != null) {
+            resetButton.setOnAction(e -> onReset());
+        }
+    }
+
+    @FXML
+    private void onReset() {
+        if (controller != null) {
+            controller.resetSimulation();
+        }
+        // re-enable start so user can start a new run
+        if (startButton != null) {
+            startButton.setDisable(false);
+        }
     }
 
     /* UI interface methods (controller calls) */

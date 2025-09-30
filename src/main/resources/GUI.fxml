@@ -6,29 +6,26 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="view.SimulatorGUI"
-            prefHeight="600.0" prefWidth="1200.0">
+<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SimulatorGUI">
 
     <!-- Labels -->
-    <Label fx:id="timeLabel" text="Time:" layoutX="20.0" layoutY="20.0"/>
-    <Label fx:id="delayLabel" text="Delay:" layoutX="20.0" layoutY="60.0"/>
-    <Label fx:id="resultLabel" text="Result:" layoutX="20.0" layoutY="100.0"/>
+    <Label fx:id="timeLabel" layoutX="20.0" layoutY="20.0" text="Time:" />
+    <Label fx:id="delayLabel" layoutX="20.0" layoutY="60.0" text="Delay:" />
+    <Label fx:id="resultLabel" layoutX="20.0" layoutY="100.0" text="Result:" />
 
     <!-- TextFields -->
-    <TextField fx:id="time" layoutX="100.0" layoutY="20.0" prefWidth="100.0"/>
-    <TextField fx:id="delay" layoutX="100.0" layoutY="60.0" prefWidth="100.0"/>
+    <TextField fx:id="time" layoutX="100.0" layoutY="20.0" prefWidth="100.0" />
+    <TextField fx:id="delay" layoutX="100.0" layoutY="60.0" prefWidth="100.0" />
 
     <!-- Result Label -->
-    <Label fx:id="results" layoutX="100.0" layoutY="100.0" prefWidth="200.0"/>
+    <Label fx:id="results" layoutX="100.0" layoutY="100.0" prefWidth="200.0" />
 
     <!-- Buttons -->
-    <Button fx:id="startButton" text="Start" layoutX="20.0" layoutY="150.0"/>
-    <Button fx:id="slowButton" text="Slow Down" layoutX="100.0" layoutY="150.0"/>
-    <Button fx:id="speedUpButton" text="Speed Up" layoutX="220.0" layoutY="150.0"/>
+    <Button fx:id="startButton" layoutX="20.0" layoutY="150.0" text="Start" />
+    <Button fx:id="slowButton" layoutX="92.0" layoutY="197.0" text="Slow Down" />
+    <Button fx:id="speedUpButton" layoutX="96.0" layoutY="148.0" text="Speed Up" />
+    <Button fx:id="resetButton" layoutX="17.0" layoutY="198.0" text="Reset" />
 
     <!-- Animation StackPane -->
-    <StackPane fx:id="animationPane" layoutX="350.0" layoutY="20.0"
-               prefWidth="1200.0" prefHeight="600.0"/>
+    <StackPane fx:id="animationPane" layoutX="350.0" layoutY="20.0" prefHeight="600.0" prefWidth="1200.0" />
 </AnchorPane>

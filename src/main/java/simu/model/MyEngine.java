@@ -87,7 +87,7 @@ public class MyEngine extends Engine {
                 };
             } else
                 // normal distribution used to model service times
-                serviceTime = new Normal(10, 6, Integer.toUnsignedLong(r.nextInt()));
+                 serviceTime = new Normal(10, 6, Integer.toUnsignedLong(r.nextInt()));
 
             servicePoints[0] = new ServicePoint(serviceTime, eventList, EventType.CHECK_IN,2);
             servicePoints[1] = new ServicePoint(serviceTime, eventList, EventType.LUGGAGE_DROP,4);
