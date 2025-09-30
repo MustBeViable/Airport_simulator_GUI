@@ -34,8 +34,16 @@ public class Run {
     @Column(name = "gate_count", nullable = false)
     private int gateCount;
 
-    @OneToOne(mappedBy = "run", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private RunStatistics statistics;
+    public Run(int luggageDropCount, int priorityLuggageDropCount, int securityCount, int checkInQueuesCount, int prioritySecurityCount, int passportControlCount, int priorityPassportControlCount, int gateCount) {
+        this.luggageDropCount = luggageDropCount;
+        this.priorityLuggageDropCount = priorityLuggageDropCount;
+        this.securityCount = securityCount;
+        this.checkInQueuesCount = checkInQueuesCount;
+        this.prioritySecurityCount = prioritySecurityCount;
+        this.passportControlCount = passportControlCount;
+        this.priorityPassportControlCount = priorityPassportControlCount;
+        this.gateCount = gateCount;
+    }
 
     public Run() {}
 
@@ -76,7 +84,4 @@ public class Run {
         return gateCount;
     }
 
-    public RunStatistics getStatistics() {
-        return statistics;
-    }
 }

@@ -57,4 +57,4 @@ CREATE TABLE run_statistics (
 DROP USER IF EXISTS 'appuser'@'localhost';
 CREATE USER 'appuser'@'localhost' IDENTIFIED BY 'password';
 GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON airport_simulator.* TO 'appuser'@'localhost';
-GRANT CREATE, DROP ON airport_simulator.* TO 'appuser2'@'localhost';
+GRANT CREATE, DROP ON airport_simulator.* TO 'appuser'@'localhost';

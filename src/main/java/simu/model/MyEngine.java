@@ -1,11 +1,16 @@
 package simu.model;
 
 import controller.IControllerMtoV;
+import dao.RunStatisticsDao;
 import eduni.distributions.*;
+import simu.entity.Run;
+import simu.entity.RunStatistics;
 import simu.framework.ArrivalProcess;
 import simu.framework.Clock;
 import simu.framework.Engine;
 import simu.framework.Event;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 import static simu.model.EventType.*;
@@ -18,6 +23,7 @@ public class MyEngine extends Engine {
     public static final boolean TEXTDEMO = false; // set false to get more realistic simulation case
     public static final boolean FIXEDARRIVALTIMES = false;
     public static final boolean FXIEDSERVICETIMES = false;
+    private RunStatisticsDao runStatisticsDao=new RunStatisticsDao();
 
     /**
      * Service Points and random number generator with different distributions are created here.
@@ -264,17 +270,57 @@ public class MyEngine extends Engine {
     @Override
     protected void results() {
 
-
         System.out.println("=== Simulation results ===");
         System.out.printf("%-8s %-12s %-12s %-12s%n", "Queue", "Max", "Min", "Average");
+        int checkInMax = servicePoints[0].getMaxLength();
+        double checkInAvg = servicePoints[0].getAverageLength();
+
+        int luggageDropMax = servicePoints[1].getMaxLength();
+        double luggageDropAvg = servicePoints[1].getAverageLength();
+
+        int priorityLuggageDropMax = servicePoints[2].getMaxLength();
+        double priorityLuggageDropAvg = servicePoints[2].getAverageLength();
+
+        int securityMax = servicePoints[3].getMaxLength();
+        double securityAvg = servicePoints[3].getAverageLength();
+
+        int prioritySecurityMax = servicePoints[4].getMaxLength();
+        double prioritySecurityAvg = servicePoints[4].getAverageLength();
+
+        int passportControlMax = servicePoints[5].getMaxLength();
+        double passportControlAvg = servicePoints[5].getAverageLength();
+
+        int priorityPassportControlMax = servicePoints[6].getMaxLength();
+        double priorityPassportControlAvg = servicePoints[6].getAverageLength();
+
+        int gateMax = servicePoints[7].getMaxLength();
+        double gateAvg = servicePoints[7].getAverageLength();
+
+        Run run = new Run(2,4,5,6,7,1,67,4);
         for (int i = 0; i < servicePoints.length; i++) {
             ServicePoint s = servicePoints[i];
+            int maxLength=s.getMaxLength();
+            double averageLength=s.getAverageLength();
             System.out.printf("%-8s %-12d %-12d %-12.2f%n",
                     "Queue " + (i + 1),
-                    s.getMaxLength(),
+                    maxLength,
                     s.getMinLength(),
-                    s.getAverageLength());
+                    averageLength);
+
         }
+        runStatisticsDao.persist(
+                new RunStatistics(
+                        run,
+                        checkInMax, checkInAvg,
+                        luggageDropMax, luggageDropAvg,
+                        priorityLuggageDropMax, priorityLuggageDropAvg,
+                        securityMax, securityAvg,
+                        prioritySecurityMax, prioritySecurityAvg,
+                        passportControlMax, passportControlAvg,
+                        priorityPassportControlMax, priorityPassportControlAvg,
+                        gateMax, gateAvg
+                )
+        );
         System.out.printf("Simulation ended at %.2f%n", Clock.getInstance().getTime());
     }
 }
