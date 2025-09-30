@@ -1,6 +1,7 @@
 package simu.model;
 
 import controller.IControllerMtoV;
+import dao.RunDao;
 import dao.RunStatisticsDao;
 import eduni.distributions.*;
 import simu.entity.Run;
@@ -24,6 +25,7 @@ public class MyEngine extends Engine {
     public static final boolean FIXEDARRIVALTIMES = false;
     public static final boolean FXIEDSERVICETIMES = false;
     private RunStatisticsDao runStatisticsDao=new RunStatisticsDao();
+    private RunDao runDao = new RunDao();
 
     /**
      * Service Points and random number generator with different distributions are created here.
@@ -297,6 +299,8 @@ public class MyEngine extends Engine {
         double gateAvg = servicePoints[7].getAverageLength();
 
         Run run = new Run(2,4,5,6,7,1,67,4);
+        runDao.persist(run);
+
         for (int i = 0; i < servicePoints.length; i++) {
             ServicePoint s = servicePoints[i];
             int maxLength=s.getMaxLength();
