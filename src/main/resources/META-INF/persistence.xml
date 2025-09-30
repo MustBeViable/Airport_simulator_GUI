@@ -10,7 +10,7 @@
             <property name="jakarta.persistence.jdbc.user" value="appuser"/>
             <property name="jakarta.persistence.jdbc.password" value="password"/>
             <property name="jakarta.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
-            <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
             <property name="jakarta.persistence.sql-dialect" value="org.hibernate.dialect.MariaDBDialect"/>
             <property name="jakarta.persistence.sql-load-script-source" value="data.sql"/>
             <property name="hibernate.show_sql" value="true" />
