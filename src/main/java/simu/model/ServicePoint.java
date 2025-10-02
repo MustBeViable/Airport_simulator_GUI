@@ -40,12 +40,22 @@ public class ServicePoint {
      * reserved, array indicating whether a line is busy or not
      */
     public ServicePoint(ContinuousGenerator generator, EventList eventList, EventType type, int lineCount){
+        if (lineCount <= 0) {
+            throw new IllegalArgumentException("lineCount must be > 0");
+        }
         this.eventList = eventList;
         this.generator = generator;
         this.eventTypeScheduled = type;
+
+        // reset stats
+        this.maxLength = Integer.MIN_VALUE;
+        this.minLength = Integer.MAX_VALUE;
+        this.sampleCount = 0;
+        this.sampleSum = 0;
+
         queues = new LinkedList[lineCount];
         reserved = new boolean[lineCount];
-        for (int i=0; i<lineCount;i++){
+        for (int i = 0; i < lineCount; i++) {
             queues[i] = new LinkedList<>();
             reserved[i] = false;
         }

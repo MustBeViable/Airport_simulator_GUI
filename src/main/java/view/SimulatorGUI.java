@@ -1,6 +1,4 @@
-
-// File: `src/main/java/view/SimulatorGUI.java`
-        package view;
+package view;
 
 import java.text.DecimalFormat;
 import controller.*;
@@ -19,6 +17,7 @@ import simu.framework.Trace.Level;
 public class SimulatorGUI extends Application implements ISimulatorUI {
 
     private static final int canvasSize = 1200;
+    private static final int[] DEFAULT_LINE_COUNTS = new int[]{1, 1, 1, 1, 1, 1, 1, 1};
 
     // Controller object (UI needs)
     private IControllerVtoM controller;
@@ -33,8 +32,18 @@ public class SimulatorGUI extends Application implements ISimulatorUI {
     @FXML private Button startButton;
     @FXML private Button slowButton;
     @FXML private Button speedUpButton;
-    @FXML private Button resetButton; // added
+    @FXML private Button resetButton;
     @FXML private StackPane animationPane;
+
+    // Spinners for line counts (add matching fx:id entries to GUI.fxml)
+    @FXML private Spinner<Integer> checkInSpinner;
+    @FXML private Spinner<Integer> luggageDropSpinner;
+    @FXML private Spinner<Integer> luggageDropPrioritySpinner;
+    @FXML private Spinner<Integer> securitySpinner;
+    @FXML private Spinner<Integer> securityPrioritySpinner;
+    @FXML private Spinner<Integer> passportSpinner;
+    @FXML private Spinner<Integer> passportPrioritySpinner;
+    @FXML private Spinner<Integer> gateSpinner;
 
     private IVisualisation displayBG, displayAnimation;
 
@@ -47,7 +56,6 @@ public class SimulatorGUI extends Application implements ISimulatorUI {
     public void start(Stage primaryStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI.fxml"));
-            // remove: loader.setController(this);
             Parent root = loader.load();
 
             primaryStage.setOnCloseRequest(t -> {
@@ -75,6 +83,32 @@ public class SimulatorGUI extends Application implements ISimulatorUI {
         displayAnimation = new Visualisation2(canvasSize, canvasSize / 2);
         animationPane.getChildren().addAll((Node) displayBG, (Node) displayAnimation);
 
+        // Initialize spinners only if they were injected from FXML
+        if (checkInSpinner != null) {
+            checkInSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 50, DEFAULT_LINE_COUNTS[0]));
+        }
+        if (luggageDropSpinner != null) {
+            luggageDropSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 50, DEFAULT_LINE_COUNTS[1]));
+        }
+        if (luggageDropPrioritySpinner != null) {
+            luggageDropPrioritySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 50, DEFAULT_LINE_COUNTS[2]));
+        }
+        if (securitySpinner != null) {
+            securitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 50, DEFAULT_LINE_COUNTS[3]));
+        }
+        if (securityPrioritySpinner != null) {
+            securityPrioritySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 50, DEFAULT_LINE_COUNTS[4]));
+        }
+        if (passportSpinner != null) {
+            passportSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 50, DEFAULT_LINE_COUNTS[5]));
+        }
+        if (passportPrioritySpinner != null) {
+            passportPrioritySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 200, DEFAULT_LINE_COUNTS[6]));
+        }
+        if (gateSpinner != null) {
+            gateSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 200, DEFAULT_LINE_COUNTS[7]));
+        }
+
         // Button actions
         startButton.setOnAction(event -> {
             controller.startSimulation();
@@ -94,7 +128,6 @@ public class SimulatorGUI extends Application implements ISimulatorUI {
         if (controller != null) {
             controller.resetSimulation();
         }
-        // re-enable start so user can start a new run
         if (startButton != null) {
             startButton.setDisable(false);
         }
@@ -120,6 +153,32 @@ public class SimulatorGUI extends Application implements ISimulatorUI {
     @Override
     public IVisualisation getVisualisation() {
         return displayAnimation;
+    }
+
+    // Added: gather current spinner values and return an array of 8 ints.
+    @Override
+    public int[] getLineCounts() {
+        try {
+            if (checkInSpinner == null || luggageDropSpinner == null || luggageDropPrioritySpinner == null ||
+                    securitySpinner == null || securityPrioritySpinner == null || passportSpinner == null ||
+                    passportPrioritySpinner == null || gateSpinner == null) {
+                return DEFAULT_LINE_COUNTS.clone();
+            }
+
+            return new int[] {
+                    checkInSpinner.getValue(),
+                    luggageDropSpinner.getValue(),
+                    luggageDropPrioritySpinner.getValue(),
+                    securitySpinner.getValue(),
+                    securityPrioritySpinner.getValue(),
+                    passportSpinner.getValue(),
+                    passportPrioritySpinner.getValue(),
+                    gateSpinner.getValue()
+            };
+        } catch (Exception ex) {
+            // Fallback to defaults on any error
+            return DEFAULT_LINE_COUNTS.clone();
+        }
     }
 
     /* JavaFX-application (UI) start-up */
