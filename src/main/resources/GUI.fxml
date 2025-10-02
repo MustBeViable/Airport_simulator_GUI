@@ -9,23 +9,23 @@
 <AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SimulatorGUI">
 
     <!-- Labels -->
-    <Label fx:id="timeLabel" layoutX="20.0" layoutY="20.0" text="Time:" />
+    <Label fx:id="timeLabel" layoutX="22.0" layoutY="24.0" text="Time:" />
     <Label fx:id="delayLabel" layoutX="20.0" layoutY="60.0" text="Delay:" />
     <Label fx:id="resultLabel" layoutX="20.0" layoutY="100.0" text="Result:" />
 
     <!-- TextFields -->
-    <TextField fx:id="time" layoutX="100.0" layoutY="20.0" prefWidth="100.0" />
-    <TextField fx:id="delay" layoutX="100.0" layoutY="60.0" prefWidth="100.0" />
+    <TextField fx:id="time" layoutX="67.0" layoutY="20.0" prefWidth="100.0" />
+    <TextField fx:id="delay" layoutX="67.0" layoutY="56.0" prefWidth="100.0" />
 
     <!-- Result Label -->
     <Label fx:id="results" layoutX="100.0" layoutY="100.0" prefWidth="200.0" />
 
     <!-- Buttons -->
-    <Button fx:id="startButton" layoutX="20.0" layoutY="150.0" text="Start" />
-    <Button fx:id="slowButton" layoutX="92.0" layoutY="197.0" text="Slow Down" />
-    <Button fx:id="speedUpButton" layoutX="96.0" layoutY="148.0" text="Speed Up" />
-    <Button fx:id="resetButton" layoutX="17.0" layoutY="198.0" text="Reset" />
+    <Button fx:id="startButton" layoutX="15.0" layoutY="150.0" prefHeight="26.0" prefWidth="46.0" text="Start" />
+    <Button fx:id="slowButton" layoutX="76.0" layoutY="185.0" text="Slow Down" />
+    <Button fx:id="speedUpButton" layoutX="76.0" layoutY="150.0" prefHeight="26.0" prefWidth="75.0" text="Speed Up" />
+    <Button fx:id="resetButton" layoutX="15.0" layoutY="185.0" text="Reset" />
 
     <!-- Animation StackPane -->
-    <StackPane fx:id="animationPane" layoutX="350.0" layoutY="20.0" prefHeight="600.0" prefWidth="1200.0" />
+    <StackPane fx:id="animationPane" layoutX="257.0" layoutY="10.0" prefHeight="604.0" prefWidth="1200.0" />
 </AnchorPane>
