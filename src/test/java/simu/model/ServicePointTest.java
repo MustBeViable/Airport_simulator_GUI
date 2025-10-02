@@ -13,7 +13,7 @@ import simu.framework.Trace;
 import java.util.ArrayList;
 import java.util.List;
 
-class ServicePointShortestQueueTest {
+class ServicePointTest {
 
     private ContinuousGenerator generator;
 
