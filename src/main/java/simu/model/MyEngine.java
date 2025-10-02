@@ -244,7 +244,22 @@ public class MyEngine extends Engine {
     protected void results() {
 
         System.out.println("=== Simulation results ===");
-        System.out.printf("%-8s %-12s %-12s %-12s%n", "Queue", "Max", "Min", "Average");
+        // ... (console printing kept as before)
+
+        // Persist run using provided initial line counts
+        Run run = new Run(
+                initialLineCounts[0],
+                initialLineCounts[1],
+                initialLineCounts[2],
+                initialLineCounts[3],
+                initialLineCounts[4],
+                initialLineCounts[5],
+                initialLineCounts[6],
+                initialLineCounts[7]
+        );
+        runDao.persist(run);
+
+        // collect stats values
         int checkInMax = servicePoints[0].getMaxLength();
         double checkInAvg = servicePoints[0].getAverageLength();
 
@@ -269,43 +284,25 @@ public class MyEngine extends Engine {
         int gateMax = servicePoints[7].getMaxLength();
         double gateAvg = servicePoints[7].getAverageLength();
 
-        // Persist run using provided initial line counts
-        Run run = new Run(
-                initialLineCounts[0],
-                initialLineCounts[1],
-                initialLineCounts[2],
-                initialLineCounts[3],
-                initialLineCounts[4],
-                initialLineCounts[5],
-                initialLineCounts[6],
-                initialLineCounts[7]
+        RunStatistics runStats = new RunStatistics(
+                run,
+                checkInMax, checkInAvg,
+                luggageDropMax, luggageDropAvg,
+                priorityLuggageDropMax, priorityLuggageDropAvg,
+                securityMax, securityAvg,
+                prioritySecurityMax, prioritySecurityAvg,
+                passportControlMax, passportControlAvg,
+                priorityPassportControlMax, priorityPassportControlAvg,
+                gateMax, gateAvg
         );
-        runDao.persist(run);
+        // if RunStatistics persists the min values as well, adapt persist call accordingly
+        runStatisticsDao.persist(runStats);
 
-        for (int i = 0; i < servicePoints.length; i++) {
-            ServicePoint s = servicePoints[i];
-            int maxLength=s.getMaxLength();
-            double averageLength=s.getAverageLength();
-            System.out.printf("%-8s %-12d %-12d %-12.2f%n",
-                    "Queue " + (i + 1),
-                    maxLength,
-                    s.getMinLength(),
-                    averageLength);
+        // show results window on JavaFX thread
+        javafx.application.Platform.runLater(() -> {
+            view.ResultsController.open(null, run, runStats);
+        });
 
-        }
-        runStatisticsDao.persist(
-                new RunStatistics(
-                        run,
-                        checkInMax, checkInAvg,
-                        luggageDropMax, luggageDropAvg,
-                        priorityLuggageDropMax, priorityLuggageDropAvg,
-                        securityMax, securityAvg,
-                        prioritySecurityMax, prioritySecurityAvg,
-                        passportControlMax, passportControlAvg,
-                        priorityPassportControlMax, priorityPassportControlAvg,
-                        gateMax, gateAvg
-                )
-        );
         System.out.printf("Simulation ended at %.2f%n", Clock.getInstance().getTime());
     }
 }

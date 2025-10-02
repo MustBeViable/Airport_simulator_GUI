@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="316.0" prefWidth="293.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ResultsController">
+    <VBox fillWidth="true" prefWidth="588.0" spacing="12.0" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="12.0">
+        <Label style="-fx-font-size:18px; -fx-font-weight:bold;" text="Simulation Results" />
+
+        <GridPane hgap="8" vgap="6">
+            <columnConstraints>
+                <ColumnConstraints halignment="LEFT" percentWidth="40.0" />
+                <ColumnConstraints halignment="CENTER" percentWidth="20.0" />
+                <ColumnConstraints halignment="CENTER" percentWidth="20.0" />
+            </columnConstraints>
+
+            <!-- Header: make header labels grow so they center over their columns -->
+            <Label text="Queue" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label maxWidth="Infinity" text="Max" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
+            <Label maxWidth="Infinity" text="Average" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
+
+            <!-- Check-in -->
+            <Label text="Check-in:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Label fx:id="checkInMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+            <Label fx:id="checkInAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+
+            <!-- Luggage -->
+            <Label text="Luggage:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <Label fx:id="luggageMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+            <Label fx:id="luggageAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+
+            <!-- Luggage Priority -->
+            <Label text="Lugg. Pri.:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <Label fx:id="luggPriMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+            <Label fx:id="luggPriAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+
+            <!-- Security -->
+            <Label text="Security:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+            <Label fx:id="securityMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+            <Label fx:id="securityAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+
+            <!-- Security Priority -->
+            <Label text="Sec. Pri.:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+            <Label fx:id="secPriMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
+            <Label fx:id="secPriAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
+
+            <!-- Passport -->
+            <Label text="Passport:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+            <Label fx:id="passportMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
+            <Label fx:id="passportAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
+
+            <!-- Passport Priority -->
+            <Label text="Pass. Pri.:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+            <Label fx:id="passPriMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" />
+            <Label fx:id="passPriAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" />
+
+            <!-- Gate -->
+            <Label text="Gate:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+            <Label fx:id="gateMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="8" />
+            <Label fx:id="gateAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="8" />
+
+            <rowConstraints>
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+            </rowConstraints>
+        </GridPane>
+
+        <Button maxWidth="120" onAction="#onClose" text="Close" />
+
+    </VBox>
+</AnchorPane>
