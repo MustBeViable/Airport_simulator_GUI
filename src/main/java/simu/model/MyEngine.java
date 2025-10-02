@@ -21,6 +21,7 @@ public class MyEngine extends Engine {
     private ArrivalProcess arrivalProcess;
     private ServicePoint[] servicePoints;
     private final int SERVICE_POINT_COUNT;
+    private final int[] initialLineCounts;
     public static final boolean TEXTDEMO = false; // set false to get more realistic simulation case
     public static final boolean FIXEDARRIVALTIMES = false;
     public static final boolean FXIEDSERVICETIMES = false;
@@ -28,104 +29,74 @@ public class MyEngine extends Engine {
     private RunDao runDao = new RunDao();
 
     /**
-     * Service Points and random number generator with different distributions are created here.
-     * We use exponent distribution for customer arrival times and normal distribution for the
-     * service times.
+     * Default constructor keeps previous defaults.
      */
     public MyEngine(IControllerMtoV controller) {
+        this(controller, new int[]{1,1,1,1,1,1,1,1});
+    }
+
+    /**
+     * New constructor: accept line counts for each service point.
+     * Expects an array of length 8 (the rest of the code assumes 8 service points).
+     */
+    public MyEngine(IControllerMtoV controller, int[] lineCounts) {
         super(controller);
-        this.SERVICE_POINT_COUNT = 8;
+        if (lineCounts == null || lineCounts.length != 8) {
+            throw new IllegalArgumentException("lineCounts must be non-null and length 8");
+        }
+        this.initialLineCounts = lineCounts.clone();
+        this.SERVICE_POINT_COUNT = initialLineCounts.length;
         servicePoints = new ServicePoint[SERVICE_POINT_COUNT];
 
         if (TEXTDEMO) {
-            /* special setup for the example in text
-             * https://github.com/jacquesbergelius/PP-CourseMaterial/blob/master/1.1_Introduction_to_Simulation.md
-             */
             Random r = new Random();
 
             ContinuousGenerator arrivalTime = null;
             if (FIXEDARRIVALTIMES) {
-                /* version where the arrival times are constant (and greater than service times) */
-
-                // make a special "random number distribution" which produces constant value for the customer arrival times
                 arrivalTime = new ContinuousGenerator() {
                     @Override
-                    public double sample() {
-                        return 10;
-                    }
-
-                    @Override
-                    public void setSeed(long seed) {
-                    }
-
-                    @Override
-                    public long getSeed() {
-                        return 0;
-                    }
-
-                    @Override
-                    public void reseed() {
-                    }
+                    public double sample() { return 10; }
+                    @Override public void setSeed(long seed) {}
+                    @Override public long getSeed() { return 0; }
+                    @Override public void reseed() {}
                 };
             } else
-                // exponential distribution is used to model customer arrivals times, to get variability between programs runs, give a variable seed
                 arrivalTime = new Negexp(10, Integer.toUnsignedLong(r.nextInt()));
 
             ContinuousGenerator serviceTime = null;
             if (FXIEDSERVICETIMES) {
-                // make a special "random number distribution" which produces constant value for the service time in service points
                 serviceTime = new ContinuousGenerator() {
-                    @Override
-                    public double sample() {
-                        return 9;
-                    }
-
-                    @Override
-                    public void setSeed(long seed) {
-                    }
-
-                    @Override
-                    public long getSeed() {
-                        return 0;
-                    }
-
-                    @Override
-                    public void reseed() {
-                    }
+                    @Override public double sample() { return 9; }
+                    @Override public void setSeed(long seed) {}
+                    @Override public long getSeed() { return 0; }
+                    @Override public void reseed() {}
                 };
             } else
-                // normal distribution used to model service times
-                 serviceTime = new Normal(10, 6, Integer.toUnsignedLong(r.nextInt()));
+                serviceTime = new Normal(10, 6, Integer.toUnsignedLong(r.nextInt()));
 
-            servicePoints[0] = new ServicePoint(serviceTime, eventList, EventType.CHECK_IN,2);
-            servicePoints[1] = new ServicePoint(serviceTime, eventList, EventType.LUGGAGE_DROP,4);
-            servicePoints[2] = new ServicePoint(serviceTime, eventList, EventType.LUGGAGE_DROP_PRIORITY,5);
-            servicePoints[3] = new ServicePoint(serviceTime, eventList, EventType.SECURITY,6);
-            servicePoints[4] = new ServicePoint(serviceTime, eventList, EventType.SECURITY_PRIORITY,7);
-            servicePoints[5] = new ServicePoint(serviceTime, eventList, EventType.PASSPORT_CONTROL,1);
-            servicePoints[6] = new ServicePoint(serviceTime, eventList, EventType.PASSPORT_CONTROL_PRIORITY,67);
-            servicePoints[7] = new ServicePoint(serviceTime, eventList, EventType.GATE,4);
+            // use provided line counts
+            servicePoints[0] = new ServicePoint(serviceTime, eventList, EventType.CHECK_IN, initialLineCounts[0]);
+            servicePoints[1] = new ServicePoint(serviceTime, eventList, EventType.LUGGAGE_DROP, initialLineCounts[1]);
+            servicePoints[2] = new ServicePoint(serviceTime, eventList, EventType.LUGGAGE_DROP_PRIORITY, initialLineCounts[2]);
+            servicePoints[3] = new ServicePoint(serviceTime, eventList, EventType.SECURITY, initialLineCounts[3]);
+            servicePoints[4] = new ServicePoint(serviceTime, eventList, EventType.SECURITY_PRIORITY, initialLineCounts[4]);
+            servicePoints[5] = new ServicePoint(serviceTime, eventList, EventType.PASSPORT_CONTROL, initialLineCounts[5]);
+            servicePoints[6] = new ServicePoint(serviceTime, eventList, EventType.PASSPORT_CONTROL_PRIORITY, initialLineCounts[6]);
+            servicePoints[7] = new ServicePoint(serviceTime, eventList, EventType.GATE, initialLineCounts[7]);
 
             arrivalProcess = new ArrivalProcess(arrivalTime, eventList, ARR1);
         } else {
-            /* more realistic simulation case with variable customer arrival times and service times */
-            servicePoints[0] = new ServicePoint(new LogNormal(2.3, 0.5), eventList, EventType.CHECK_IN,3);
-            servicePoints[1] = new ServicePoint(new Gamma(2.0, 5.0), eventList, EventType.LUGGAGE_DROP,6);
-            servicePoints[2] = new ServicePoint(new Gamma(2.0, 5.0), eventList, EventType.LUGGAGE_DROP_PRIORITY,5);
-            servicePoints[3] = new ServicePoint(new TruncatedNormal(12, 6), eventList, EventType.SECURITY,4);
-            servicePoints[4] = new ServicePoint(new Normal(8, 4), eventList, EventType.SECURITY_PRIORITY,2);
-            servicePoints[5] = new ServicePoint(new LogNormal(2.1, 0.7), eventList, EventType.PASSPORT_CONTROL,3);
-            servicePoints[6] = new ServicePoint(new LogNormal(2.1, 0.7), eventList, EventType.PASSPORT_CONTROL_PRIORITY,66);
-            servicePoints[7] = new ServicePoint(new Normal(5, 1), eventList, EventType.GATE,5);
+            // realistic case, use line counts
+            servicePoints[0] = new ServicePoint(new LogNormal(2.3, 0.5), eventList, EventType.CHECK_IN, initialLineCounts[0]);
+            servicePoints[1] = new ServicePoint(new Gamma(2.0, 5.0), eventList, EventType.LUGGAGE_DROP, initialLineCounts[1]);
+            servicePoints[2] = new ServicePoint(new Gamma(2.0, 5.0), eventList, EventType.LUGGAGE_DROP_PRIORITY, initialLineCounts[2]);
+            servicePoints[3] = new ServicePoint(new TruncatedNormal(12, 6), eventList, EventType.SECURITY, initialLineCounts[3]);
+            servicePoints[4] = new ServicePoint(new Normal(8, 4), eventList, EventType.SECURITY_PRIORITY, initialLineCounts[4]);
+            servicePoints[5] = new ServicePoint(new LogNormal(2.1, 0.7), eventList, EventType.PASSPORT_CONTROL, initialLineCounts[5]);
+            servicePoints[6] = new ServicePoint(new LogNormal(2.1, 0.7), eventList, EventType.PASSPORT_CONTROL_PRIORITY, initialLineCounts[6]);
+            servicePoints[7] = new ServicePoint(new Normal(5, 1), eventList, EventType.GATE, initialLineCounts[7]);
 
             arrivalProcess = new ArrivalProcess(new Negexp(15, 5), eventList, ARR1);
-            /*
-            OLI VALMIIKSI KOODISSA MUKANA
-			servicePoints[0] = new ServicePoint(new Normal(10, 6), eventList, EventType.DEP1);
-			servicePoints[1] = new ServicePoint(new Normal(10, 10), eventList, EventType.DEP2);
-			servicePoints[2] = new ServicePoint(new Normal(5, 3), eventList, EventType.DEP3);
-
-			arrivalProcess = new ArrivalProcess(new Negexp(15, 5), eventList, EventType.ARR1);*/
         }
     }
 
@@ -298,7 +269,17 @@ public class MyEngine extends Engine {
         int gateMax = servicePoints[7].getMaxLength();
         double gateAvg = servicePoints[7].getAverageLength();
 
-        Run run = new Run(2,4,5,6,7,1,67,4);
+        // Persist run using provided initial line counts
+        Run run = new Run(
+                initialLineCounts[0],
+                initialLineCounts[1],
+                initialLineCounts[2],
+                initialLineCounts[3],
+                initialLineCounts[4],
+                initialLineCounts[5],
+                initialLineCounts[6],
+                initialLineCounts[7]
+        );
         runDao.persist(run);
 
         for (int i = 0; i < servicePoints.length; i++) {
