@@ -2,30 +2,101 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SimulatorGUI">
-
-    <!-- Labels -->
-    <Label fx:id="timeLabel" layoutX="22.0" layoutY="24.0" text="Time:" />
-    <Label fx:id="delayLabel" layoutX="20.0" layoutY="60.0" text="Delay:" />
-    <Label fx:id="resultLabel" layoutX="20.0" layoutY="100.0" text="Result:" />
-
-    <!-- TextFields -->
-    <TextField fx:id="time" layoutX="67.0" layoutY="20.0" prefWidth="100.0" />
-    <TextField fx:id="delay" layoutX="67.0" layoutY="56.0" prefWidth="100.0" />
-
-    <!-- Result Label -->
-    <Label fx:id="results" layoutX="100.0" layoutY="100.0" prefWidth="200.0" />
-
-    <!-- Buttons -->
-    <Button fx:id="startButton" layoutX="15.0" layoutY="150.0" prefHeight="26.0" prefWidth="46.0" text="Start" />
-    <Button fx:id="slowButton" layoutX="76.0" layoutY="185.0" text="Slow Down" />
-    <Button fx:id="speedUpButton" layoutX="76.0" layoutY="150.0" prefHeight="26.0" prefWidth="75.0" text="Speed Up" />
-    <Button fx:id="resetButton" layoutX="15.0" layoutY="185.0" text="Reset" />
+<AnchorPane prefHeight="654.0" prefWidth="1481.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SimulatorGUI">
 
     <!-- Animation StackPane -->
-    <StackPane fx:id="animationPane" layoutX="257.0" layoutY="10.0" prefHeight="604.0" prefWidth="1200.0" />
+    <StackPane fx:id="animationPane" layoutX="255.0" layoutY="25.0" prefHeight="604.0" prefWidth="1200.0" />
+
+    <!-- Labels -->
+    <Label fx:id="timeLabel" layoutX="13.0" layoutY="18.0" text="Time:">
+      <font>
+         <Font size="20.0" />
+      </font></Label>
+    <Label fx:id="delayLabel" layoutX="12.0" layoutY="76.0" text="Delay:">
+      <font>
+         <Font size="20.0" />
+      </font></Label>
+
+    <!-- TextFields -->
+    <TextField fx:id="time" layoutX="89.0" layoutY="11.0" prefWidth="100.0">
+      <font>
+         <Font size="20.0" />
+      </font></TextField>
+    <TextField fx:id="delay" layoutX="89.0" layoutY="69.0" prefWidth="100.0">
+      <font>
+         <Font size="20.0" />
+      </font></TextField>
+
+    <!-- Spinners for line counts -->
+    <Label layoutX="12.0" layoutY="152.0" text="Check-in:">
+      <font>
+         <Font size="20.0" />
+      </font></Label>
+    <Spinner fx:id="checkInSpinner" layoutX="134.0" layoutY="152.0" prefHeight="30.0" prefWidth="90.0" />
+
+    <Label layoutX="13.0" layoutY="195.0" text="Luggage:">
+      <font>
+         <Font size="20.0" />
+      </font></Label>
+
+    <Label layoutX="16.0" layoutY="237.0" prefHeight="30.0" prefWidth="90.0" text="Lugg. Pri.:">
+      <font>
+         <Font size="20.0" />
+      </font></Label>
+    <Spinner fx:id="luggageDropPrioritySpinner" layoutX="134.0" layoutY="237.0" prefHeight="30.0" prefWidth="90.0" />
+
+    <Label layoutX="16.0" layoutY="279.0" text="Security:">
+      <font>
+         <Font size="20.0" />
+      </font></Label>
+    <Spinner fx:id="securitySpinner" layoutX="134.0" layoutY="279.0" prefHeight="30.0" prefWidth="90.0" />
+
+    <Label layoutX="19.0" layoutY="318.0" prefHeight="30.0" prefWidth="76.0" text="Sec. Pri.:">
+      <font>
+         <Font size="20.0" />
+      </font></Label>
+    <Spinner fx:id="securityPrioritySpinner" layoutX="134.0" layoutY="318.0" prefHeight="30.0" prefWidth="90.0" />
+
+    <Label layoutX="17.0" layoutY="357.0" text="Passport:">
+      <font>
+         <Font size="20.0" />
+      </font></Label>
+    <Spinner fx:id="passportSpinner" layoutX="134.0" layoutY="357.0" prefHeight="30.0" prefWidth="90.0" />
+
+    <Label layoutX="16.0" layoutY="398.0" prefHeight="30.0" prefWidth="90.0" text="Pass. Pri.:">
+      <font>
+         <Font size="20.0" />
+      </font></Label>
+    <Spinner fx:id="passportPrioritySpinner" layoutX="134.0" layoutY="398.0" prefHeight="30.0" prefWidth="90.0" />
+
+    <Label layoutX="16.0" layoutY="437.0" text="Gate:">
+      <font>
+         <Font size="20.0" />
+      </font></Label>
+    <Spinner fx:id="gateSpinner" layoutX="134.0" layoutY="437.0" prefHeight="30.0" prefWidth="90.0" />
+
+    <!-- Buttons -->
+    <Button fx:id="startButton" layoutX="28.0" layoutY="501.0" prefHeight="43.0" prefWidth="76.0" text="Start">
+      <font>
+         <Font size="20.0" />
+      </font></Button>
+    <Button fx:id="slowButton" layoutX="116.0" layoutY="562.0" prefHeight="43.0" prefWidth="126.0" text="Slow Down">
+      <font>
+         <Font size="20.0" />
+      </font></Button>
+    <Button fx:id="speedUpButton" layoutX="116.0" layoutY="501.0" prefHeight="43.0" prefWidth="126.0" text="Speed Up">
+      <font>
+         <Font size="20.0" />
+      </font></Button>
+    <Button fx:id="resetButton" layoutX="28.0" layoutY="562.0" text="Reset">
+      <font>
+         <Font size="20.0" />
+      </font></Button>
+    <Spinner fx:id="luggageDropSpinner" layoutX="134.0" layoutY="195.0" prefHeight="30.0" prefWidth="90.0" />
 </AnchorPane>

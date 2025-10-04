@@ -1,6 +1,9 @@
+
 package controller;
 
 import javafx.application.Platform;
+import simu.entity.Run;
+import simu.entity.RunStatistics;
 import simu.framework.IEngine;
 import simu.model.EventType;
 import simu.model.MyEngine;
@@ -12,23 +15,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
-	private IEngine engine;
-	private ISimulatorUI ui;
-	
-	public Controller(ISimulatorUI ui) {
-		this.ui = ui;
-	}
+    private IEngine engine;
+    private ISimulatorUI ui;
 
-	/* Engine control: */
-	@Override
-	public void startSimulation() {
-		engine = new MyEngine(this); // new Engine thread is created for every simulation
-		engine.setSimulationTime(ui.getTime());
-		engine.setDelay(ui.getDelay());
-		ui.getVisualisation().clearDisplay();
-		((Thread) engine).start();
-		//((Thread)engine).run(); // Never like this, why?
-	}
+    // sensible defaults used when UI doesn't provide values
+    private static final int[] DEFAULT_LINE_COUNTS = new int[]{1,1,1,1,1,1,1,1};
+
+    public Controller(ISimulatorUI ui) {
+        this.ui = ui;
+    }
+
+    /* Engine control: */
+    @Override
+    public void startSimulation() {
+        // Try to obtain line counts from the UI; fall back to defaults when missing/invalid
+        int[] lineCounts = null;
+        try {
+            lineCounts = ui.getLineCounts();  // get user-selected line counts from UI
+        } catch (Exception ignored) {}
+
+        if (lineCounts == null || lineCounts.length != DEFAULT_LINE_COUNTS.length) {
+            lineCounts = DEFAULT_LINE_COUNTS.clone();
+        }
+
+        engine = new MyEngine(this, lineCounts); // pass the user-selected line counts
+        engine.setSimulationTime(ui.getTime());
+        engine.setDelay(ui.getDelay());
+        ui.getVisualisation().clearDisplay();
+        ((Thread) engine).start();
+        //((Thread)engine).run(); // Never like this, why?
+    }
 
     @Override
     public void resetSimulation() {
@@ -44,9 +60,7 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
             ui.setEndingTime(0);
         });
 
-        // If the soft reset is not sufficient (engine still running or static state persists),
-        // call restartApplication() to relaunch the JVM. Uncomment to use:
-         restartApplication();
+        restartApplication();
     }
 
     private void restartApplication() {
@@ -69,36 +83,35 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
             e.printStackTrace();
         }
 
-        // Exit current process so the new JVM becomes the running app
         System.exit(0);
     }
 
 
-	@Override
-	public void decreaseSpeed() { // hidastetaan moottorisäiettä
-		engine.setDelay((long)(engine.getDelay()*1.10));
-	}
+    @Override
+    public void decreaseSpeed() { // hidastetaan moottorisäiettä
+        engine.setDelay((long)(engine.getDelay()*1.10));
+    }
 
-	@Override
-	public void increaseSpeed() { // nopeutetaan moottorisäiettä
-		engine.setDelay((long)(engine.getDelay()*0.9));
-	}
+    @Override
+    public void increaseSpeed() { // nopeutetaan moottorisäiettä
+        engine.setDelay((long)(engine.getDelay()*0.9));
+    }
 
 
-	/* Simulation results passing to the UI
-	 * Because FX-UI updates come from engine thread, they need to be directed to the JavaFX thread
-	 */
-	@Override
-	public void showEndTime(double time) {
-		Platform.runLater(()->ui.setEndingTime(time));
-	}
+    /* Simulation results passing to the UI
+     * Because FX-UI updates come from engine thread, they need to be directed to the JavaFX thread
+     */
+    @Override
+    public void showEndTime(double time) {
+        Platform.runLater(()->ui.setEndingTime(time));
+    }
 
-	@Override
-	public void visualiseCustomer() {
-		Platform.runLater(() -> {
+    @Override
+    public void visualiseCustomer() {
+        Platform.runLater(() -> {
             ui.getVisualisation().newCustomer();
         });
-	}
+    }
 
     public void visualiseCheckIn() {
         Platform.runLater(() -> {
@@ -132,6 +145,11 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         Platform.runLater(() -> {
             ui.getVisualisation().customerAnimationToGate(from);
         });
+    }
 
+    public void visualiseResults(Run run, RunStatistics runStats) {
+        Platform.runLater(() -> {
+            view.ResultsController.open(null, run, runStats);
+        });
     }
 }
