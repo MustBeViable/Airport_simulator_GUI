@@ -295,7 +295,7 @@ public class MyEngine extends Engine {
                 priorityPassportControlMax, priorityPassportControlAvg,
                 gateMax, gateAvg
         );
-        // if RunStatistics persists the min values as well, adapt persist call accordingly
+
         runStatisticsDao.persist(runStats);
 
 
