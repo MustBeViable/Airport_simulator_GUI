@@ -2,6 +2,8 @@
 package controller;
 
 import javafx.application.Platform;
+import simu.entity.Run;
+import simu.entity.RunStatistics;
 import simu.framework.IEngine;
 import simu.model.EventType;
 import simu.model.MyEngine;
@@ -143,6 +145,11 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         Platform.runLater(() -> {
             ui.getVisualisation().customerAnimationToGate(from);
         });
+    }
 
+    public void visualiseResults(Run run, RunStatistics runStats) {
+        Platform.runLater(() -> {
+            view.ResultsController.open(null, run, runStats);
+        });
     }
 }
