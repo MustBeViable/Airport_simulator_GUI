@@ -298,10 +298,8 @@ public class MyEngine extends Engine {
         // if RunStatistics persists the min values as well, adapt persist call accordingly
         runStatisticsDao.persist(runStats);
 
-        // show results window on JavaFX thread
-        javafx.application.Platform.runLater(() -> {
-            view.ResultsController.open(null, run, runStats);
-        });
+
+        controller.visualiseResults(run, runStats);
 
         System.out.printf("Simulation ended at %.2f%n", Clock.getInstance().getTime());
     }

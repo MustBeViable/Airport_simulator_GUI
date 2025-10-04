@@ -1,6 +1,8 @@
 package controller;
 
 import javafx.application.Platform;
+import simu.entity.Run;
+import simu.entity.RunStatistics;
 import simu.model.EventType;
 
 /* interface for the engine */
@@ -12,4 +14,5 @@ public interface IControllerMtoV {
         public void visualiseSecurity(boolean isPriority, EventType from);
         public void visualisePassport(boolean isPriority, EventType from);
         public void visualiseGate(EventType from);
+        public void visualiseResults(Run run, RunStatistics runStatistics);
 }

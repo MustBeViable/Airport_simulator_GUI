@@ -1,15 +1,22 @@
 package view;
 
+import dao.RunDao;
+import dao.RunStatisticsDao;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import simu.entity.Run;
 import simu.entity.RunStatistics;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ResultsController {
 
@@ -37,6 +44,15 @@ public class ResultsController {
     @FXML private Label gateMaxLabel;
     @FXML private Label gateAvgLabel;
 
+    @FXML private ListView<Run> listView;
+    private final ObservableList<Run> observableList = FXCollections.observableArrayList();
+    private final RunDao runDao = new RunDao();
+    private final RunStatisticsDao runStatisticsDao = new RunStatisticsDao();
+
+
+    public void initialize() {
+        setListView();
+    }
     // populate labels from your entity getters
     public void setData(Run run, RunStatistics s) {
         // Assumes RunStatistics has getters matching these names; adapt if different
@@ -64,6 +80,67 @@ public class ResultsController {
         gateMaxLabel.setText(String.valueOf(s.getGateQueueMaxLength()));
         gateAvgLabel.setText(String.format("%.2f", s.getGateQueueAverageLength()));
     }
+
+    public void setListView() {
+        List<Run> runList = null;
+        try {
+             runList = runDao.findAll();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        observableList.setAll(runList);
+        listView.setItems(observableList);
+
+        listView.setCellFactory(v -> new ListCell<>() {
+            @Override protected void updateItem(Run n, boolean empty) {
+                super.updateItem(n, empty);
+                if (empty || n == null) {
+                    setText(null);
+                } else {
+                    setText("run" + n.getId()+".");
+                }
+            }
+        });
+        listView.getSelectionModel().selectedItemProperty().addListener((obs, oldRun, newRun) -> {
+            if (newRun == null) {
+                clearLabels();
+                return;
+            }
+
+            RunStatistics stats = null;
+            if (stats == null) {
+                stats = runStatisticsDao.find(newRun.getId());
+            }
+            if (stats != null) {
+                setData(newRun, stats);
+            } else {
+                clearLabels();
+            }
+        });
+        if (!observableList.isEmpty()) {
+            listView.getSelectionModel().selectFirst();
+        }
+    };
+
+    private void clearLabels() {
+        checkInMaxLabel.setText("");
+        checkInAvgLabel.setText("");
+        luggageMaxLabel.setText("");
+        luggageAvgLabel.setText("");
+        luggPriMaxLabel.setText("");
+        luggPriAvgLabel.setText("");
+        securityMaxLabel.setText("");
+        securityAvgLabel.setText("");
+        secPriMaxLabel.setText("");
+        secPriAvgLabel.setText("");
+        passportMaxLabel.setText("");
+        passportAvgLabel.setText("");
+        passPriMaxLabel.setText("");
+        passPriAvgLabel.setText("");
+        gateMaxLabel.setText("");
+        gateAvgLabel.setText("");
+    }
+
 
     @FXML
     private void onClose() {
