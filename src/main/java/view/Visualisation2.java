@@ -316,4 +316,9 @@ public class Visualisation2 extends Canvas implements IVisualisation {
 
     }
 
+    @Override
+    public void resetCustomerCount() {
+        this.customerCount = 0;
+    }
+
 }

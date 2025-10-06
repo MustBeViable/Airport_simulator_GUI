@@ -54,4 +54,9 @@ public class VisualisationBG extends Canvas implements IVisualisation {
 
     }
 
+    @Override
+    public void resetCustomerCount() {
+
+    }
+
 }

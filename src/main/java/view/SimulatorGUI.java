@@ -160,6 +160,14 @@ public class SimulatorGUI extends Application implements ISimulatorUI {
         return displayAnimation;
     }
 
+    @Override
+    public void activateRestart() {
+        Platform.runLater(() -> {
+            startButton.setText("Restart");
+            startButton.setDisable(false);
+        });
+    }
+
     // Added: gather current spinner values and return an array of 8 ints.
     @Override
     public int[] getLineCounts() {
