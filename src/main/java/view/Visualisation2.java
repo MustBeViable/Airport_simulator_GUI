@@ -3,7 +3,6 @@ package view;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import simu.model.EventType;
@@ -11,35 +10,35 @@ import simu.model.EventType;
 
 public class Visualisation2 extends Canvas implements IVisualisation {
     private GraphicsContext gc;
-	int customerCount = 0;
+    int customerCount = 0;
+    private final static double duration = 0.5;  // animation timer, determines how long is the animation
+    private final static double ballRadius = 5.0;  // animation ball size
 
-	public Visualisation2(int w, int h) {
-		super(w, h);
-		gc = this.getGraphicsContext2D();
-		clearDisplay();
-	}
+    public Visualisation2(int w, int h) {
+        super(w, h);
+        gc = this.getGraphicsContext2D();
+        clearDisplay();
+    }
 
-	public void clearDisplay() {
+    public void clearDisplay() {
 
-	}
-	
-	public void newCustomer() {
-		customerCount++;
-		
-		gc.setFill(Color.WHITE);					// first erase old text
+    }
+
+    public void newCustomer() {
+        customerCount++;
+
+        gc.setFill(Color.WHITE);					// first erase old text
         gc.fillRect(0,0, 350, 100);
-		gc.setFill(Color.RED);						// then write new text
-		gc.setFont(new Font(20));
-		gc.fillText("Customer " + customerCount, 20, 20);
-	}
+        gc.setFill(Color.RED);						// then write new text
+        gc.setFont(new Font(20));
+        gc.fillText("Customer " + customerCount, 20, 20);
+    }
     @Override
     public void newCustomerCheckin() {
         //alkupistet
         double coordx0 = 125, coordx1 = 255;
         // loppu pisteet
         double coordy0 = 280, coordy1 = 280;
-        double duration = 1.0;
-        double ballRadius = 5.0;
 
         // 0..1
         AnimationTimer checkinTimer = new AnimationTimer() {
@@ -83,8 +82,6 @@ public class Visualisation2 extends Canvas implements IVisualisation {
             coordx1 = 430;
             coordy1 = 495;
         }
-        double duration = 1.0;
-        double ballRadius = 5.0;
 
         // 0..1
         AnimationTimer luggageDropTimer = new AnimationTimer() {
@@ -151,8 +148,6 @@ public class Visualisation2 extends Canvas implements IVisualisation {
             coordx1 = 590;
             coordy1 = 435;
         }
-        double duration = 1.0;
-        double ballRadius = 5.0;
 
         // 0..1
         AnimationTimer securityTimer = new AnimationTimer() {
@@ -214,8 +209,6 @@ public class Visualisation2 extends Canvas implements IVisualisation {
             coordx1 = 865;
             coordy1 = 435;
         }
-        double duration = 1.0;
-        double ballRadius = 5.0;
 
         AnimationTimer passportTimer = new AnimationTimer() {
             long startTime = -1;
@@ -282,8 +275,6 @@ public class Visualisation2 extends Canvas implements IVisualisation {
         coordx1 = 1030;
         coordy1 = 290;
 
-        double duration = 1.0;
-        double ballRadius = 5.0;
 
         AnimationTimer gateTimer = new AnimationTimer() {
             long startTime = -1;
