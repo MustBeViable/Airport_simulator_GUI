@@ -1,22 +1,22 @@
 
 package controller;
 
+import dao.RunDao;
+import dao.RunStatisticsDao;
 import javafx.application.Platform;
 import simu.entity.Run;
 import simu.entity.RunStatistics;
+import simu.framework.Clock;
 import simu.framework.IEngine;
 import simu.model.EventType;
 import simu.model.MyEngine;
 import view.ISimulatorUI;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
     private IEngine engine;
     private ISimulatorUI ui;
+    private final RunDao rDao = new RunDao();
+    private final RunStatisticsDao runStatisticsDao = new RunStatisticsDao();
 
     // sensible defaults used when UI doesn't provide values
     private static final int[] DEFAULT_LINE_COUNTS = new int[]{1,1,1,1,1,1,1,1};
@@ -43,7 +43,6 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         engine.setDelay(ui.getDelay());
         ui.getVisualisation().clearDisplay();
         ((Thread) engine).start();
-        //((Thread)engine).run(); // Never like this, why?
     }
 
     @Override
@@ -54,15 +53,35 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
             } catch (Exception ignored) {}
             engine = null;
         }
-
         Platform.runLater(() -> {
-            ui.getVisualisation().clearDisplay();
-            ui.setEndingTime(0);
+            Clock.getInstance().setTime(0.0);
+            startSimulation();
         });
-
-        restartApplication();
     }
 
+    @Override
+    public void showResults() {
+        try {
+            Run run = rDao.find(1);
+            if (run == null) {
+                run = new Run(0,0,0,0,
+                        0,0,0,0);
+            }
+            RunStatistics runStatistics = runStatisticsDao.find(1);
+            if (runStatistics == null) {
+                runStatistics = new RunStatistics(run,0,0,
+                        0,0,0,
+                        0,0,0,
+                        0,0,0,
+                        0,0,
+                        0,0,0);
+            }
+            visualiseResults(run, runStatistics);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+/*
     private void restartApplication() {
         String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
         String classpath = System.getProperty("java.class.path");
@@ -85,7 +104,7 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
 
         System.exit(0);
     }
-
+*/
 
     @Override
     public void decreaseSpeed() { // hidastetaan moottorisäiettä
@@ -149,7 +168,7 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
 
     public void visualiseResults(Run run, RunStatistics runStats) {
         Platform.runLater(() -> {
-            view.ResultsController.open(null, run, runStats);
+            ResultsController.open(null, run, runStats);
         });
     }
 }

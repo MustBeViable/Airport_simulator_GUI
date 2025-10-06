@@ -133,6 +133,11 @@ public class SimulatorGUI extends Application implements ISimulatorUI {
         }
     }
 
+    @FXML
+    private void showResults() {
+        controller.showResults();
+    }
+
     /* UI interface methods (controller calls) */
     @Override
     public double getTime() {

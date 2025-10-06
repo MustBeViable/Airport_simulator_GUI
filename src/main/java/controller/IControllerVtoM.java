@@ -6,4 +6,5 @@ public interface IControllerVtoM {
 		public void increaseSpeed();
 		public void decreaseSpeed();
         public void resetSimulation();
+        public void showResults();
 }
