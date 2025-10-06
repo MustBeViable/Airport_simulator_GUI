@@ -48,7 +48,6 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         engine.setDelay(ui.getDelay());
         ui.getVisualisation().clearDisplay();
         ((Thread) engine).start();
-        //((Thread)engine).run(); // Never like this, why?
     }
 
     @Override
