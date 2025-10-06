@@ -248,14 +248,14 @@ public class MyEngine extends Engine {
 
         // Persist run using provided initial line counts
         Run run = new Run(
-                initialLineCounts[0],
-                initialLineCounts[1],
-                initialLineCounts[2],
-                initialLineCounts[3],
-                initialLineCounts[4],
-                initialLineCounts[5],
-                initialLineCounts[6],
-                initialLineCounts[7]
+                initialLineCounts[1], // luggageDrop
+                initialLineCounts[2], // priorityLuggageDrop
+                initialLineCounts[3], // security
+                initialLineCounts[0], // checkInQueues
+                initialLineCounts[4], // prioritySecurity
+                initialLineCounts[5], // passportControl
+                initialLineCounts[6], // priorityPassportControl
+                initialLineCounts[7]  // gate
         );
         runDao.persist(run);
 
