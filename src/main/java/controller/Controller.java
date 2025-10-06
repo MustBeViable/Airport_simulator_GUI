@@ -12,11 +12,6 @@ import simu.model.EventType;
 import simu.model.MyEngine;
 import view.ISimulatorUI;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
     private IEngine engine;
     private ISimulatorUI ui;
@@ -173,7 +168,7 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
 
     public void visualiseResults(Run run, RunStatistics runStats) {
         Platform.runLater(() -> {
-            view.ResultsController.open(null, run, runStats);
+            ResultsController.open(null, run, runStats);
         });
     }
 }
