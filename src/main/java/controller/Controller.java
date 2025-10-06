@@ -42,6 +42,7 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         engine.setSimulationTime(ui.getTime());
         engine.setDelay(ui.getDelay());
         ui.getVisualisation().clearDisplay();
+        ui.getVisualisation().setDuration(1);
         ((Thread) engine).start();
     }
 
@@ -109,11 +110,13 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
     @Override
     public void decreaseSpeed() { // hidastetaan moottorisäiettä
         engine.setDelay((long)(engine.getDelay()*1.10));
+        ui.getVisualisation().scaleAnimationSpeed(1.1);
     }
 
     @Override
     public void increaseSpeed() { // nopeutetaan moottorisäiettä
         engine.setDelay((long)(engine.getDelay()*0.9));
+        ui.getVisualisation().scaleAnimationSpeed(0.9);
     }
 
 

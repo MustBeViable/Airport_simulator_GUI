@@ -62,4 +62,14 @@ public class Visualisation extends Canvas implements IVisualisation {
     public void resetCustomerCount() {
 
     }
+
+    @Override
+    public void scaleAnimationSpeed(double multiplier) {
+
+    }
+
+    @Override
+    public void setDuration(int duration) {
+
+    }
 }

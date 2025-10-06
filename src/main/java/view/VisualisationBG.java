@@ -59,4 +59,14 @@ public class VisualisationBG extends Canvas implements IVisualisation {
 
     }
 
+    @Override
+    public void scaleAnimationSpeed(double multiplier) {
+
+    }
+
+    @Override
+    public void setDuration(int duration) {
+
+    }
+
 }
