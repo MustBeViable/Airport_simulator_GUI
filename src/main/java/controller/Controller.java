@@ -172,7 +172,7 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
             ui.getVisualisation().resetCustomerCount();
             resetSimulation();
             ResultsController.open(null, run, runStats);
-            ui.activateRestart();
+            ui.activateRestart(); //changes the Start button text to restart. No time to fix it to the presentation
         });
     }
 }
