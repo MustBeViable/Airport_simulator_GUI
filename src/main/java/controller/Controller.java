@@ -55,7 +55,6 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         }
         Platform.runLater(() -> {
             Clock.getInstance().setTime(0.0);
-            startSimulation();
         });
     }
 
@@ -77,6 +76,7 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
                         0,0,0);
             }
             visualiseResults(run, runStatistics);
+            resetSimulation();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -166,9 +166,13 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         });
     }
 
+
     public void visualiseResults(Run run, RunStatistics runStats) {
         Platform.runLater(() -> {
+            ui.getVisualisation().resetCustomerCount();
+            resetSimulation();
             ResultsController.open(null, run, runStats);
+            ui.activateRestart();
         });
     }
 }

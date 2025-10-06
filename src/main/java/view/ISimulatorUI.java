@@ -11,5 +11,7 @@ public interface ISimulatorUI {
 	// Controller requires
 	public IVisualisation getVisualisation();
 
+    public void activateRestart();
+
     int[] getLineCounts();
 }

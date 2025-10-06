@@ -57,4 +57,9 @@ public class Visualisation extends Canvas implements IVisualisation {
     public void customerAnimationToGate(EventType from) {
 
     }
+
+    @Override
+    public void resetCustomerCount() {
+
+    }
 }
