@@ -44,6 +44,16 @@ public class ResultsController {
     @FXML private Label gateMaxLabel;
     @FXML private Label gateAvgLabel;
 
+    @FXML private Label runIdLabel;
+    @FXML private Label checkInCountLabel;
+    @FXML private Label luggageCountLabel;
+    @FXML private Label priorityLuggageCountLabel;
+    @FXML private Label securityCountLabel;
+    @FXML private Label prioritySecurityCountLabel;
+    @FXML private Label passportCountLabel;
+    @FXML private Label priorityPassportCountLabel;
+    @FXML private Label gateCountLabel;
+
     @FXML private ListView<Run> listView;
     private final ObservableList<Run> observableList = FXCollections.observableArrayList();
     private final RunDao runDao = new RunDao();
@@ -81,14 +91,44 @@ public class ResultsController {
         gateAvgLabel.setText(String.format("%.2f", s.getGateQueueAverageLength()));
     }
 
+    private void setRunInfo(Run r) {
+        if (r == null) {
+            clearRunInfo();
+            return;
+        }
+        runIdLabel.setText(String.valueOf(r.getId()));
+        checkInCountLabel.setText(String.valueOf(r.getCheckInQueuesCount()));
+        luggageCountLabel.setText(String.valueOf(r.getLuggageDropCount()));
+        priorityLuggageCountLabel.setText(String.valueOf(r.getPriorityLuggageDropCount()));
+        securityCountLabel.setText(String.valueOf(r.getSecurityCount()));
+        prioritySecurityCountLabel.setText(String.valueOf(r.getPrioritySecurityCount()));
+        passportCountLabel.setText(String.valueOf(r.getPassportControlCount()));
+        priorityPassportCountLabel.setText(String.valueOf(r.getPriorityPassportControlCount()));
+        gateCountLabel.setText(String.valueOf(r.getGateCount()));
+    }
+
+    private void clearRunInfo() {
+        runIdLabel.setText("");
+        checkInCountLabel.setText("");
+        luggageCountLabel.setText("");
+        priorityLuggageCountLabel.setText("");
+        securityCountLabel.setText("");
+        prioritySecurityCountLabel.setText("");
+        passportCountLabel.setText("");
+        priorityPassportCountLabel.setText("");
+        gateCountLabel.setText("");
+    }
+
     public void setListView() {
         List<Run> runList = null;
         try {
-             runList = runDao.findAll();
+            runList = runDao.findAll();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        observableList.setAll(runList);
+        if (runList != null) {
+            observableList.setAll(runList);
+        }
         listView.setItems(observableList);
 
         listView.setCellFactory(v -> new ListCell<>() {
@@ -97,30 +137,32 @@ public class ResultsController {
                 if (empty || n == null) {
                     setText(null);
                 } else {
-                    setText("run" + n.getId()+".");
+                    setText("run" + n.getId() + ".");
                 }
             }
         });
+
         listView.getSelectionModel().selectedItemProperty().addListener((obs, oldRun, newRun) -> {
             if (newRun == null) {
                 clearLabels();
+                clearRunInfo();
                 return;
             }
+            setRunInfo(newRun); // RIGHT panel
 
-            RunStatistics stats = null;
-            if (stats == null) {
-                stats = runStatisticsDao.find(newRun.getId());
-            }
+            // IMPORTANT: fetch by run_id (NOT RunStatistics.id)
+            RunStatistics stats = runStatisticsDao.find(newRun.getId());
             if (stats != null) {
                 setData(newRun, stats);
             } else {
                 clearLabels();
             }
         });
+
         if (!observableList.isEmpty()) {
             listView.getSelectionModel().selectFirst();
         }
-    };
+    }
 
     private void clearLabels() {
         checkInMaxLabel.setText("");

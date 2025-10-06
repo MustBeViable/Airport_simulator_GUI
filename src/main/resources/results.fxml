@@ -4,161 +4,136 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ResultsController">
-    <VBox fillWidth="true" prefWidth="588.0" spacing="12.0" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="12.0">
-        <Label style="-fx-font-size:18px; -fx-font-weight:bold;" text="Simulation Results" />
+<SplitPane dividerPositions="0.6" prefHeight="600.0" prefWidth="900.0"
+           xmlns="http://javafx.com/javafx/17.0.12"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="controller.ResultsController">
 
-        <GridPane hgap="8" vgap="6">
-            <columnConstraints>
-                <ColumnConstraints halignment="LEFT" percentWidth="40.0" />
-                <ColumnConstraints halignment="CENTER" percentWidth="20.0" />
-                <ColumnConstraints halignment="CENTER" percentWidth="20.0" />
-            </columnConstraints>
+    <!-- LEFT: Statistics + List -->
+    <items>
+        <AnchorPane>
+            <children>
+                <VBox spacing="12.0" AnchorPane.topAnchor="12.0" AnchorPane.bottomAnchor="12.0"
+                      AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0">
+                    <Label style="-fx-font-size:18px; -fx-font-weight:bold;" text="Simulation Results"/>
+                    <GridPane hgap="8" vgap="6">
+                        <columnConstraints>
+                            <ColumnConstraints halignment="LEFT" percentWidth="40.0"/>
+                            <ColumnConstraints halignment="CENTER" percentWidth="20.0"/>
+                            <ColumnConstraints halignment="CENTER" percentWidth="20.0"/>
+                        </columnConstraints>
 
-            <!-- Header: make header labels grow so they center over their columns -->
-            <Label text="Queue" GridPane.columnIndex="0" GridPane.rowIndex="0">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label maxWidth="Infinity" text="Max" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label maxWidth="Infinity" text="Average" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
+                        <!-- Header -->
+                        <Label text="Queue" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <font><Font size="16.0"/></font>
+                        </Label>
+                        <Label maxWidth="Infinity" text="Max" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                               GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
+                            <font><Font size="16.0"/></font>
+                        </Label>
+                        <Label maxWidth="Infinity" text="Average" GridPane.columnIndex="2" GridPane.rowIndex="0"
+                               GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
+                            <font><Font size="16.0"/></font>
+                        </Label>
 
-            <!-- Check-in -->
-            <Label text="Check-in:" GridPane.columnIndex="0" GridPane.rowIndex="1">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="checkInMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="checkInAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
+                        <!-- Check-in -->
+                        <Label text="Check-in:" GridPane.columnIndex="0" GridPane.rowIndex="1"><font><Font size="16.0"/></font></Label>
+                        <Label fx:id="checkInMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER"/>
+                        <Label fx:id="checkInAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.halignment="CENTER"/>
 
-            <!-- Luggage -->
-            <Label text="Luggage:" GridPane.columnIndex="0" GridPane.rowIndex="2">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="luggageMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="luggageAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
+                        <!-- Luggage -->
+                        <Label text="Luggage:" GridPane.columnIndex="0" GridPane.rowIndex="2"><font><Font size="16.0"/></font></Label>
+                        <Label fx:id="luggageMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="CENTER"/>
+                        <Label fx:id="luggageAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.halignment="CENTER"/>
 
-            <!-- Luggage Priority -->
-            <Label text="Lugg. Pri.:" GridPane.columnIndex="0" GridPane.rowIndex="3">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="luggPriMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="luggPriAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
+                        <!-- Luggage Priority -->
+                        <Label text="Lugg. Pri.:" GridPane.columnIndex="0" GridPane.rowIndex="3"><font><Font size="16.0"/></font></Label>
+                        <Label fx:id="luggPriMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.halignment="CENTER"/>
+                        <Label fx:id="luggPriAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.halignment="CENTER"/>
 
-            <!-- Security -->
-            <Label text="Security:" GridPane.columnIndex="0" GridPane.rowIndex="4">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="securityMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="securityAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
+                        <!-- Security -->
+                        <Label text="Security:" GridPane.columnIndex="0" GridPane.rowIndex="4"><font><Font size="16.0"/></font></Label>
+                        <Label fx:id="securityMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.halignment="CENTER"/>
+                        <Label fx:id="securityAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.halignment="CENTER"/>
 
-            <!-- Security Priority -->
-            <Label text="Sec. Pri.:" GridPane.columnIndex="0" GridPane.rowIndex="5">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="secPriMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="secPriAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
+                        <!-- Security Priority -->
+                        <Label text="Sec. Pri.:" GridPane.columnIndex="0" GridPane.rowIndex="5"><font><Font size="16.0"/></font></Label>
+                        <Label fx:id="secPriMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.halignment="CENTER"/>
+                        <Label fx:id="secPriAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.halignment="CENTER"/>
 
-            <!-- Passport -->
-            <Label text="Passport:" GridPane.columnIndex="0" GridPane.rowIndex="6">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="passportMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="passportAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
+                        <!-- Passport -->
+                        <Label text="Passport:" GridPane.columnIndex="0" GridPane.rowIndex="6"><font><Font size="16.0"/></font></Label>
+                        <Label fx:id="passportMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.halignment="CENTER"/>
+                        <Label fx:id="passportAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="6" GridPane.halignment="CENTER"/>
 
-            <!-- Passport Priority -->
-            <Label text="Pass. Pri.:" GridPane.columnIndex="0" GridPane.rowIndex="7">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="passPriMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="passPriAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
+                        <!-- Passport Priority -->
+                        <Label text="Pass. Pri.:" GridPane.columnIndex="0" GridPane.rowIndex="7"><font><Font size="16.0"/></font></Label>
+                        <Label fx:id="passPriMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.halignment="CENTER"/>
+                        <Label fx:id="passPriAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="7" GridPane.halignment="CENTER"/>
 
-            <!-- Gate -->
-            <Label text="Gate:" GridPane.columnIndex="0" GridPane.rowIndex="8">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="gateMaxLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="8">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
-            <Label fx:id="gateAvgLabel" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="8">
-            <font>
-               <Font size="16.0" />
-            </font></Label>
+                        <!-- Gate -->
+                        <Label text="Gate:" GridPane.columnIndex="0" GridPane.rowIndex="8"><font><Font size="16.0"/></font></Label>
+                        <Label fx:id="gateMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.halignment="CENTER"/>
+                        <Label fx:id="gateAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="8" GridPane.halignment="CENTER"/>
 
-            <rowConstraints>
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-            </rowConstraints>
-        </GridPane>
+                        <rowConstraints>
+                            <RowConstraints/><RowConstraints/><RowConstraints/><RowConstraints/><RowConstraints/>
+                            <RowConstraints/><RowConstraints/><RowConstraints/><RowConstraints/>
+                        </rowConstraints>
+                    </GridPane>
 
-        <Button maxWidth="120" onAction="#onClose" text="Close">
-         <font>
-            <Font size="16.0" />
-         </font></Button>
-      <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" />
+                    <Button maxWidth="120" onAction="#onClose" text="Close">
+                        <font><Font size="16.0"/></font>
+                    </Button>
 
-    </VBox>
-</AnchorPane>
+                    <!-- Run list with compact summary per row -->
+                    <Label text="Runs" style="-fx-font-weight: bold;"/>
+                    <ListView fx:id="listView" prefHeight="220.0"/>
+                </VBox>
+            </children>
+        </AnchorPane>
+
+        <!-- RIGHT: Run configuration (counts) -->
+        <AnchorPane>
+            <children>
+                <VBox spacing="12.0" AnchorPane.topAnchor="12.0" AnchorPane.bottomAnchor="12.0"
+                      AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0">
+                    <Label text="Run Setup" style="-fx-font-size:18px; -fx-font-weight:bold;"/>
+                    <GridPane hgap="12" vgap="8">
+                        <columnConstraints>
+                            <ColumnConstraints halignment="LEFT" percentWidth="55"/>
+                            <ColumnConstraints halignment="RIGHT" percentWidth="45"/>
+                        </columnConstraints>
+
+                        <Label text="Run ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <Label fx:id="runIdLabel" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                        <Label text="Check-in queues:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <Label fx:id="checkInCountLabel" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                        <Label text="Luggage drop:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <Label fx:id="luggageCountLabel" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                        <Label text="Priority luggage drop:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <Label fx:id="priorityLuggageCountLabel" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                        <Label text="Security lanes:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <Label fx:id="securityCountLabel" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                        <Label text="Priority security lanes:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                        <Label fx:id="prioritySecurityCountLabel" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                        <Label text="Passport control booths:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                        <Label fx:id="passportCountLabel" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+                        <Label text="Priority passport booths:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+                        <Label fx:id="priorityPassportCountLabel" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+                        <Label text="Gates:" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+                        <Label fx:id="gateCountLabel" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+                    </GridPane>
+                </VBox>
+            </children>
+        </AnchorPane>
+    </items>
+</SplitPane>
