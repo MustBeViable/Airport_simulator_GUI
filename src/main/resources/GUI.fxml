@@ -90,14 +90,9 @@
       <font>
          <Font size="20.0" />
       </font></Button>
-    <Button fx:id="resetButton" layoutX="22.0" layoutY="562.0" prefHeight="43.0" prefWidth="89.0" text="Restart">
+    <Button layoutX="22.0" layoutY="562.0" onAction="#showResults" prefHeight="43.0" prefWidth="89.0" text="Result">
       <font>
          <Font size="20.0" />
       </font></Button>
     <Spinner fx:id="luggageDropSpinner" layoutX="134.0" layoutY="195.0" prefHeight="30.0" prefWidth="90.0" />
-   <Button layoutX="67.0" layoutY="618.0" mnemonicParsing="false" onAction="#showResults" prefHeight="30.0" prefWidth="90.0" text="Results">
-      <font>
-         <Font size="20.0" />
-      </font>
-   </Button>
 </AnchorPane>
