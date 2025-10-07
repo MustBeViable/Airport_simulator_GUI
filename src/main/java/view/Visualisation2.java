@@ -11,7 +11,7 @@ import simu.model.EventType;
 public class Visualisation2 extends Canvas implements IVisualisation {
     private GraphicsContext gc;
     int customerCount = 0;
-    private final static double duration = 0.5;  // animation timer, determines how long is the animation
+    private static double duration = 1;  // animation timer, determines how long is the animation
     private final static double ballRadius = 5.0;  // animation ball size
 
     public Visualisation2(int w, int h) {
@@ -310,6 +310,16 @@ public class Visualisation2 extends Canvas implements IVisualisation {
     @Override
     public void resetCustomerCount() {
         this.customerCount = 0;
+    }
+
+    @Override
+    public void scaleAnimationSpeed(double multiplier) {
+        Math.max(duration *= multiplier, 0.05);
+    }
+
+    @Override
+    public void setDuration(int dur) {
+        duration = dur;
     }
 
 }

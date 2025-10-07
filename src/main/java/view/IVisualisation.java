@@ -11,5 +11,7 @@ public interface IVisualisation {
     public void customerAnimationToPassport(boolean isPriority, EventType from);
     public void customerAnimationToGate(EventType from);
     public void resetCustomerCount();
+    public void scaleAnimationSpeed(double Multiplier);
+    public void setDuration(int duration);
 }
 
