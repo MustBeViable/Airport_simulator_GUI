@@ -9,7 +9,6 @@
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="controller.ResultsController">
 
-    <!-- LEFT: Statistics + List -->
     <items>
         <AnchorPane>
             <children>
@@ -36,42 +35,34 @@
                             <font><Font size="16.0"/></font>
                         </Label>
 
-                        <!-- Check-in -->
                         <Label text="Check-in:" GridPane.columnIndex="0" GridPane.rowIndex="1"><font><Font size="16.0"/></font></Label>
                         <Label fx:id="checkInMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER"/>
                         <Label fx:id="checkInAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.halignment="CENTER"/>
 
-                        <!-- Luggage -->
                         <Label text="Luggage:" GridPane.columnIndex="0" GridPane.rowIndex="2"><font><Font size="16.0"/></font></Label>
                         <Label fx:id="luggageMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="CENTER"/>
                         <Label fx:id="luggageAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.halignment="CENTER"/>
 
-                        <!-- Luggage Priority -->
                         <Label text="Lugg. Pri.:" GridPane.columnIndex="0" GridPane.rowIndex="3"><font><Font size="16.0"/></font></Label>
                         <Label fx:id="luggPriMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.halignment="CENTER"/>
                         <Label fx:id="luggPriAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.halignment="CENTER"/>
 
-                        <!-- Security -->
                         <Label text="Security:" GridPane.columnIndex="0" GridPane.rowIndex="4"><font><Font size="16.0"/></font></Label>
                         <Label fx:id="securityMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.halignment="CENTER"/>
                         <Label fx:id="securityAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.halignment="CENTER"/>
 
-                        <!-- Security Priority -->
                         <Label text="Sec. Pri.:" GridPane.columnIndex="0" GridPane.rowIndex="5"><font><Font size="16.0"/></font></Label>
                         <Label fx:id="secPriMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.halignment="CENTER"/>
                         <Label fx:id="secPriAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.halignment="CENTER"/>
 
-                        <!-- Passport -->
                         <Label text="Passport:" GridPane.columnIndex="0" GridPane.rowIndex="6"><font><Font size="16.0"/></font></Label>
                         <Label fx:id="passportMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.halignment="CENTER"/>
                         <Label fx:id="passportAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="6" GridPane.halignment="CENTER"/>
 
-                        <!-- Passport Priority -->
                         <Label text="Pass. Pri.:" GridPane.columnIndex="0" GridPane.rowIndex="7"><font><Font size="16.0"/></font></Label>
                         <Label fx:id="passPriMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.halignment="CENTER"/>
                         <Label fx:id="passPriAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="7" GridPane.halignment="CENTER"/>
 
-                        <!-- Gate -->
                         <Label text="Gate:" GridPane.columnIndex="0" GridPane.rowIndex="8"><font><Font size="16.0"/></font></Label>
                         <Label fx:id="gateMaxLabel" GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.halignment="CENTER"/>
                         <Label fx:id="gateAvgLabel" GridPane.columnIndex="2" GridPane.rowIndex="8" GridPane.halignment="CENTER"/>
@@ -86,14 +77,12 @@
                         <font><Font size="16.0"/></font>
                     </Button>
 
-                    <!-- Run list with compact summary per row -->
                     <Label text="Runs" style="-fx-font-weight: bold;"/>
                     <ListView fx:id="listView" prefHeight="220.0"/>
                 </VBox>
             </children>
         </AnchorPane>
 
-        <!-- RIGHT: Run configuration (counts) -->
         <AnchorPane>
             <children>
                 <VBox spacing="12.0" AnchorPane.topAnchor="12.0" AnchorPane.bottomAnchor="12.0"
