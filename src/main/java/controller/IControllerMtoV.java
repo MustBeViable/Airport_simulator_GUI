@@ -5,7 +5,10 @@ import simu.entity.Run;
 import simu.entity.RunStatistics;
 import simu.model.EventType;
 
-/* interface for the engine */
+/**
+ * Base abstract methods for controller
+ * @author Elias Rinne and whoever made the base
+ */
 public interface IControllerMtoV {
 		public void showEndTime(double time);
 		public void visualiseCustomer();

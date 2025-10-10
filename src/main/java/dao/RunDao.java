@@ -7,6 +7,12 @@ import simu.entity.Run;
 import java.util.Currency;
 import java.util.List;
 
+/**
+ * Dao class for simulation run settings.
+ *
+ * @author Elias Rinne
+ */
+
 public class RunDao {
 
     public void persist(Run run) {
