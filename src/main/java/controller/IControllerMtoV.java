@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.application.Platform;
 import simu.entity.Run;
 import simu.entity.RunStatistics;
 import simu.model.EventType;
