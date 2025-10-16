@@ -2,25 +2,18 @@ package simu.model;
 
 import simu.framework.IEventType;
 
-// TODO:
-// Event types are defined by the requirements of the simulation model
+/**
+ * Enumerate type for simulation.
+ * @author Sakari Honkavaara, Elias Rinne, Elias Eide
+ */
 public enum EventType implements IEventType {
     ARR1,
-    CHECK_IN_Q,
-    SECURITY_Q,
-    PASSPORT_CONTROL_Q,
-    GATE_Q,
     CHECK_IN,
     SECURITY,
     PASSPORT_CONTROL,
     GATE,
     LUGGAGE_DROP,
     LUGGAGE_DROP_PRIORITY,
-
-    SECURITY_Q_PRIORITY,
-    PASSPORT_CONTROL_Q_PRIORITY,
-    GATE_Q_PRIORITY,
     SECURITY_PRIORITY,
-    PASSPORT_CONTROL_PRIORITY,
-    GATE_PRIORITY,
+    PASSPORT_CONTROL_PRIORITY
 }
