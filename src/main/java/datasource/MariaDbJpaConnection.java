@@ -4,13 +4,24 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
+/**
+ * Database connection class for simulation run statistic settings.
+ * Build as singleton to ensure one instance per program.
+ * @author Elias Rinne
+ */
+
 public class MariaDbJpaConnection {
 
     private static EntityManagerFactory emf = null;
     private static EntityManager em = null;
 
+    /**
+     * Returns EntityManager instance. If not made, makes it.
+     * @return EntityManager instance
+     * @author Elias Rinne
+     */
+
     public static EntityManager getInstance() {
-        // you need to add synchronization if you run in a multi-threaded environment
 
         if (em==null) {
             if (emf==null) {
