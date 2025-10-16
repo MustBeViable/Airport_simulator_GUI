@@ -3,6 +3,13 @@ package simu.entity;
 
 import jakarta.persistence.*;
 
+/**
+ * JPA entity that stores aggregated queue statistics for a single simulation {@link Run}.
+ * Mapped to the table {@code run_statistics}. Each row is associated 1:1 with a {@link Run}
+ * via a foreign key column {@code run_id} (unique, non-null). All metrics are stored as either
+ * integer maxima or double-precision averages per queue type.
+ * @author Elias Rinne
+ */
 
 @Entity
 @Table(name = "run_statistics")
@@ -63,6 +70,30 @@ public class RunStatistics {
 
     @Column(name = "gate_queue_average_length", nullable = false)
     private double gateQueueAverageLength;
+
+    /**
+     * Full-argument constructor used to populate all metrics for a given run.
+     *
+     * @param run owning run (non-null)
+     * @param checkInQueueMaxLength max length of check-in queue
+     * @param checkInQueueAverageLength average length of check-in queue
+     * @param luggageDropQueueMaxLength max length of luggage-drop queue
+     * @param luggageDropQueueAverageLength average length of luggage-drop queue
+     * @param priorityLuggageDropQueueMaxLength max length of priority luggage-drop queue
+     * @param priorityLuggageDropQueueAverageLength average length of priority luggage-drop queue
+     * @param securityQueueMaxLength max length of security queue
+     * @param securityQueueAverageLength average length of security queue
+     * @param prioritySecurityQueueMaxLength max length of priority security queue
+     * @param prioritySecurityQueueAverageLength average length of priority security queue
+     * @param passportControlQueueMaxLength max length of passport control queue
+     * @param passportControlQueueAverageLength average length of passport control queue
+     * @param priorityPassportControlQueueMaxLength max length of priority passport control queue
+     * @param priorityPassportControlQueueAverageLength average length of priority passport control queue
+     * @param gateQueueMaxLength max length of gate queue
+     * @param gateQueueAverageLength average length of gate queue
+     *
+     * @author Elias Rinne
+     */
 
     public RunStatistics(Run run, int checkInQueueMaxLength, double checkInQueueAverageLength,
                          int luggageDropQueueMaxLength, double luggageDropQueueAverageLength,
