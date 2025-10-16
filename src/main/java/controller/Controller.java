@@ -12,6 +12,17 @@ import simu.model.EventType;
 import simu.model.MyEngine;
 import view.ISimulatorUI;
 
+/**
+ * Controller that orchestrates the simulation engine and the JavaFX UI.
+ * <p>Responsibilities:</p>
+ * <ul>
+ *   <li>Starts/stops the simulation engine and configures timing parameters.</li>
+ *   <li>Fetches persisted {@link Run} and {@link RunStatistics} via DAOs.</li>
+ *   <li>Schedules UI updates on the JavaFX Application Thread.</li>
+ * </ul>
+ * <p><b>Threading:</b> Methods may be called from the engine thread; all UI changes are marshalled via
+ * {@link javafx.application.Platform#runLater(Runnable)} to the JavaFX Application Thread.</p>
+ */
 public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
     private IEngine engine;
     private ISimulatorUI ui;
@@ -25,7 +36,10 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         this.ui = ui;
     }
 
-    /* Engine control: */
+    /**
+     * Initialises necessary objects to start the simulation
+     * @author Elias Eide and whoever made the base
+     */
     @Override
     public void startSimulation() {
         // Try to obtain line counts from the UI; fall back to defaults when missing/invalid
@@ -46,6 +60,10 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         ((Thread) engine).start();
     }
 
+    /**
+     * Sets clock back to 0 and ends the engine thread. Enables the new run.
+     * @author Elias Eide and Elias Rinne
+     */
     @Override
     public void resetSimulation() {
         if (engine!=null) {
@@ -59,6 +77,10 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         });
     }
 
+    /**
+     * Opens result window and shows correct data from run
+     * @author Elias Rinne and Elias Eide
+     */
     @Override
     public void showResults() {
         try {
@@ -82,37 +104,23 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
             System.out.println(e.getMessage());
         }
     }
-/*
-    private void restartApplication() {
-        String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-        String classpath = System.getProperty("java.class.path");
-        String mainClass = "Main"; // adjust if your main class is in a package
 
-        List<String> command = new ArrayList<>();
-        command.add(javaBin);
-        command.add("-cp");
-        command.add(classpath);
-        command.add(mainClass);
-
-        ProcessBuilder builder = new ProcessBuilder(command);
-        builder.inheritIO(); // optional: attach IO to new process
-
-        try {
-            builder.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.exit(0);
-    }
-*/
-
+    /**
+     * Decreases simulation and animation speed
+     * @author Elias Rinne and whoever made the base
+     * @version 1.0
+     */
     @Override
-    public void decreaseSpeed() { // hidastetaan moottorisäiettä
+    public void decreaseSpeed() {
         engine.setDelay((long)(engine.getDelay()*1.10));
         ui.getVisualisation().scaleAnimationSpeed(1.1);
     }
 
+    /**
+     * Increases simulation and animation speed
+     * @author Elias Rinne and whoever made the base
+     * @version 1.0
+     */
     @Override
     public void increaseSpeed() { // nopeutetaan moottorisäiettä
         engine.setDelay((long)(engine.getDelay()*0.9));
@@ -128,19 +136,29 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         Platform.runLater(()->ui.setEndingTime(time));
     }
 
+    /**
+     * Times the animation for customer counter
+     */
     @Override
     public void visualiseCustomer() {
         Platform.runLater(() -> {
             ui.getVisualisation().newCustomer();
         });
     }
-
+    /**
+     * Times the animation for checkin
+     * @author Elias Rinne
+     */
     public void visualiseCheckIn() {
         Platform.runLater(() -> {
             ui.getVisualisation().newCustomerCheckin();
         });
     }
 
+    /**
+     * Times the animation for luggage drop
+     * @author Elias Rinne
+     */
     @Override
     public void visualiseLuggageDrop(double startX, double startY, boolean isPriority) {
         Platform.runLater(() -> {
@@ -148,6 +166,10 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         });
     }
 
+    /**
+     * Times the animation for security
+     * @author Elias Rinne
+     */
     @Override
     public void visualiseSecurity(boolean isPriority, EventType from) {
         Platform.runLater(() -> {
@@ -155,6 +177,10 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         });
     }
 
+    /**
+     * Times the animation for passport
+     * @author Elias Rinne
+     */
     @Override
     public void visualisePassport(boolean isPriority, EventType from) {
         Platform.runLater(() -> {
@@ -162,6 +188,10 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
         });
     }
 
+    /**
+     * Times the animation for gate
+     * @author Elias Rinne
+     */
     @Override
     public void visualiseGate(EventType from) {
         Platform.runLater(() -> {
@@ -170,6 +200,12 @@ public class Controller implements IControllerVtoM, IControllerMtoV {   // NEW
     }
 
 
+    /**
+     * After the simulation have bees finished opens result window for user
+     * @param run is current run instance
+     * @param runStats is current stats from the run
+     * @author Elias Eide and Elias Rinne
+     */
     public void visualiseResults(Run run, RunStatistics runStats) {
         Platform.runLater(() -> {
             ui.getVisualisation().resetCustomerCount();
