@@ -65,9 +65,9 @@ public class Visualisation2 extends Canvas implements IVisualisation {
      */
     @Override
     public void newCustomerCheckin() {
-        //alkupistet
+        //starting points
         double coordx0 = 125, coordx1 = 255;
-        // loppu pisteet
+        //end points
         double coordy0 = 280, coordy1 = 280;
 
         // 0..1
