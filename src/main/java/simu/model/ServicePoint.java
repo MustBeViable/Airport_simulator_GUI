@@ -5,41 +5,38 @@ import simu.framework.Clock;
 import simu.framework.Event;
 import simu.framework.EventList;
 import simu.framework.Trace;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
+/**
+ * Represents a service point in the simulation.
+ * Each service point has one or more queues where passengers wait,
+ * and servers that process them. It also tracks statistics such as
+ * maximum and average queue lengths.
+ */
 public class ServicePoint {
-    private LinkedList<Passenger>[] queues; // Data Structure used
-    private ContinuousGenerator generator;
-    private EventList eventList;
-    private EventType eventTypeScheduled;
-    private boolean[] reserved ;
-    private int maxLength=Integer.MIN_VALUE;
-    private int minLength=Integer.MAX_VALUE;
-    private long sampleCount=0;
-    private long sampleSum=0;
+    private LinkedList<Passenger>[] queues; // array of queues
+    private ContinuousGenerator generator;  // Random generator
+    private EventList eventList;            // Event list for scheduling
+    private EventType eventTypeScheduled;   // Event type for service completion
+    private boolean[] reserved;             // Tracks which lines are busy
+    private int maxLength = Integer.MIN_VALUE;
+    private int minLength = Integer.MAX_VALUE;
+    private long sampleCount = 0;
+    private long sampleSum = 0;
     private double averageLength;
-    //private boolean reserved = false;
-
-    /* Random number generator for choosing a queue, CAN BE CHANGED */
-    private Random rand = new Random();
-    private ArrayList<Integer> queueLengths = new ArrayList<>();
-    //Queuestrategy strategy; // option: ordering of the customer
-
-
 
     /**
-     * Create the service point with lines with waiting queue.
+     * Create the service point with the given number of queues.
      *
-     * @param generator Random number generator for service time simulation
-     * @param eventList Simulator event list, needed for the insertion of service ready event
-     * @param type Event type for the service end event
-     * queues, number of lines withwaiting queue
-     * reserved, array indicating whether a line is busy or not
+     * @param generator  random number generator for service time simulation
+     * @param eventList  simulator event list, needed for inserting service completion events
+     * @param type       event type for the service end event
+     * @param lineCount  number of lines in this service point
+     * @throws IllegalArgumentException if lineCount <= 0
      */
-    public ServicePoint(ContinuousGenerator generator, EventList eventList, EventType type, int lineCount){
+    public ServicePoint(ContinuousGenerator generator, EventList eventList, EventType type, int lineCount) {
         if (lineCount <= 0) {
             throw new IllegalArgumentException("lineCount must be > 0");
         }
@@ -63,21 +60,21 @@ public class ServicePoint {
     }
 
     /**
-     * Add a customer to the service point queue.
+     * Add a passenger to the shortest available queue.
      *
-     * @param a Customer to be queued
+     * @param a passenger to be queued
      */
-    public void addQueue(Passenger a) {	// The first customer of the queue is always in service, also added to random line
-        int shortestQueue=queues[0].size();
-        int shortestQueueIndex=0;
-        for (int i=0; i<queues.length; i++){
-            int lengthOfQueue=queues[i].size();
+    public void addQueue(Passenger a) { // The first customer of the queue is always in service
+        int shortestQueue = queues[0].size();
+        int shortestQueueIndex = 0;
+        for (int i = 0; i < queues.length; i++) {
+            int lengthOfQueue = queues[i].size();
 
-            if(lengthOfQueue<shortestQueue){
-                shortestQueue=lengthOfQueue;
-                shortestQueueIndex=i;
+            if (lengthOfQueue < shortestQueue) {
+                shortestQueue = lengthOfQueue;
+                shortestQueueIndex = i;
             }
-            if (lengthOfQueue==0) {
+            if (lengthOfQueue == 0) {
                 shortestQueueIndex = i;
                 break;
             }
@@ -87,63 +84,65 @@ public class ServicePoint {
     }
 
     /**
-     * Remove customer from the waiting queue.
-     * Here we calculate also the appropriate measurement values.
+     * Remove a passenger from the longest queue.
+     * Updates statistics as well.
      *
-     * @return Customer retrieved from the waiting queue
+     * @return passenger retrieved from the waiting queue, or null if all queues are empty
      */
     public Passenger removeQueue() {
-        int longestQueue=-1;
-        int longestQueueIndex=-1;
-        for (int i=0; i<queues.length; i++){
-            int lengthOfQueue=queues[i].size();
+        int longestQueue = -1;
+        int longestQueueIndex = -1;
+        for (int i = 0; i < queues.length; i++) {
+            int lengthOfQueue = queues[i].size();
 
-            if(lengthOfQueue>longestQueue){
-                longestQueue=lengthOfQueue;
-                longestQueueIndex=i;
+            if (lengthOfQueue > longestQueue) {
+                longestQueue = lengthOfQueue;
+                longestQueueIndex = i;
             }
         }
-        if (longestQueueIndex!=-1 && longestQueue>0) {
-            reserved[longestQueueIndex]=false;
+        if (longestQueueIndex != -1 && longestQueue > 0) {
+            reserved[longestQueueIndex] = false;
             sampleAllQueues();
             return queues[longestQueueIndex].poll();
-
         }
 
         return null;
     }
 
     /**
-     * Begins a new service, customer is on the queue during the service
+     * Begins a new service on the given queue index.
+     * Marks the line as reserved and schedules a completion event.
      *
-     * Inserts a new event to the event list when the service should be ready.
+     * @param lineIndex index of the queue to serve
      */
     public void beginService(int lineIndex) {
         // Begins a new service, customer is on the queue during the service
-        Passenger p= queues[lineIndex].peek();
-        if (p!=null) {
-            Trace.out(Trace.Level.INFO, "Starting a new service for the customer #" + queues[lineIndex].peek().getId());
+        Passenger p = queues[lineIndex].peek();
+        if (p != null) {
+            Trace.out(Trace.Level.INFO,
+                    "Starting a new service for the customer #" + queues[lineIndex].peek().getId());
             reserved[lineIndex] = true;
             double serviceTime = generator.sample();
             eventList.add(new Event(eventTypeScheduled, Clock.getInstance().getTime() + serviceTime));
             sampleAllQueues();
-
         }
     }
 
     /**
-     * Check whether the service point is busy
+     * Check whether the given line is currently reserved (busy).
      *
-     * @return logical value indicating service state
+     * @param lineIndex index of the queue
+     * @return true if reserved, false otherwise
      */
-    public boolean isReserved(int lineIndex){
+    public boolean isReserved(int lineIndex) {
         return reserved[lineIndex];
     }
 
     /**
-     * Check whether there is customers on the waiting queue
+     * Check whether there are passengers waiting in the given queue.
      *
-     * @return logival value indicating queue status
+     * @param lineIndex index of the queue
+     * @return true if the queue has passengers, false otherwise
      */
     public boolean isOnQueue(int lineIndex) {
         if (!queues[lineIndex].isEmpty()) {
@@ -152,67 +151,55 @@ public class ServicePoint {
         return false;
     }
 
+    /**
+     * Check whether the given queue is empty.
+     *
+     * @param lineIndex index of the queue
+     * @return true if empty, false otherwise
+     */
     public boolean isQueueEmpty(int lineIndex) {
         return queues[lineIndex].isEmpty();
     }
 
-    //Pitäsköhä servicepointit kaikki olla jossai listassa? katotaan miten sakke o sen tehny
-    // to-do: selvitä miten sakke luo ja hallinnoi listoi
-    /*
-    public void addLenghtToQueueLengths() {
-        queueLengths.add(queue.toArray().length);
-    }
-*/
-    private void addQueueLength(int length) {
-        this.queueLengths.add(length);
-    }
+    /**
+     * Records current length to statistics and max length
+     * @param length records current length to statistics
+     */
 
-    public void findMinMaxLengths() {
-        int shortest = Integer.MAX_VALUE;
-        int longest = Integer.MIN_VALUE;
-        int sum = 0;
-        for (Integer length : queueLengths) {
-            sum += length;
-            if (length < shortest) {
-                shortest = length;
-            } if (length > longest) {
-                longest =  length;
-            }
-        }
-        this.maxLength = longest;
-        this.minLength = shortest;
-        this.averageLength = (double) sum / queueLengths.size();
-    }
-
-    private void recordQueueLength(int length){
-        sampleSum+=length;
+    private void recordQueueLength(int length) {
+        sampleSum += length;
         sampleCount++;
-        if (length>maxLength){
-            maxLength=length;
+        if (length > maxLength) {
+            maxLength = length;
         }
-        if (length<minLength){
-            minLength=length;
+        if (length < minLength) {
+            minLength = length;
         }
     }
 
-    public void sampleAllQueues(){
-        for (LinkedList<Passenger>q:queues){
+    /**
+     * Samples the length of all queues and updates statistics.
+     */
+    public void sampleAllQueues() {
+        for (LinkedList<Passenger> q : queues) {
             recordQueueLength(q.size());
         }
     }
 
+    /**
+     * Get the number of lines (queues) in the service point.
+     *
+     * @return number of lines
+     */
     public int getLineCount() {
         return queues.length;
     }
 
-    public int getMinLength() {
-        if (minLength == Integer.MAX_VALUE) {
-            return 0;
-        } else {
-            return minLength;
-        }
-    }
-
+    /**
+     * Get the maximum observed queue length.
+     *
+     * @return maximum queue length, or 0 if no samples exist
+     */
     public int getMaxLength() {
         if (maxLength == Integer.MIN_VALUE) {
             return 0;
@@ -221,17 +208,16 @@ public class ServicePoint {
         }
     }
 
+    /**
+     * Get the average queue length across all samples.
+     *
+     * @return average queue length, or 0.0 if no samples exist
+     */
     public double getAverageLength() {
-        if (sampleCount==0){
-            return 0.0;}
-        else{
-            return (double) sampleSum/sampleCount;}
+        if (sampleCount == 0) {
+            return 0.0;
+        } else {
+            return (double) sampleSum / sampleCount;
+        }
     }
-
-
 }
-/**
- * Get the number of lines (queues) in the service point
- *
- * @return number of lines
- */
