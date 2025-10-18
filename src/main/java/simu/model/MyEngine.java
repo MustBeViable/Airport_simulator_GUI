@@ -11,25 +11,68 @@ import simu.framework.Clock;
 import simu.framework.Engine;
 import simu.framework.Event;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import static simu.model.EventType.*;
 
+/**
+ * Discrete-event simulation engine for the airport flow.
+ * <p>
+ * This engine wires together an {@link ArrivalProcess}, a fixed set of {@link ServicePoint}s
+ * (one logical station per {@link EventType}), and a UI controller ({@link IControllerMtoV})
+ * for visualization callbacks. It also persists the configured line counts and measured
+ * queue statistics via {@link RunDao} and {@link RunStatisticsDao} at the end of the run.
+ * </p>
+ *
+ * <h2>Service point layout (8 entries)</h2>
+ * <ol>
+ * <li>index 0: {@link EventType#CHECK_IN}</li>
+ * <li>index 1: {@link EventType#LUGGAGE_DROP}</li>
+ * <li>index 2: {@link EventType#LUGGAGE_DROP_PRIORITY}</li>
+ * <li>index 3: {@link EventType#SECURITY}</li>
+ * <li>index 4: {@link EventType#SECURITY_PRIORITY}</li>
+ * <li>index 5: {@link EventType#PASSPORT_CONTROL}</li>
+ * <li>index 6: {@link EventType#PASSPORT_CONTROL_PRIORITY}</li>
+ * <li>index 7: {@link EventType#GATE}</li>
+ * </ol>
+ *
+ * <h3>Distributions</h3>
+ * <p>
+ * In <em>text demo</em> mode ({@link #TEXTDEMO}), arrival/service-time generation can be toggled between
+ * fixed and random using {@link #FIXEDARRIVALTIMES} and {@link #FXIEDSERVICETIMES}.
+ * In the realistic mode (default), each station uses a domain-appropriate distribution
+ * (e.g., {@link LogNormal}, {@link Gamma}, {@link TruncatedNormal}, {@link Normal}).
+ * </p>
+ *
+ * <h3>Threading</h3>
+ * <p>
+ * The engine itself runs on its own thread (see {@link Engine}), while the controller
+ * callbacks should marshal UI updates to the JavaFX Application Thread as needed.
+ * </p>
+ */
 
 public class MyEngine extends Engine {
+    /** Generates arrivals into the system ({@link EventType#ARR1}). */
     private ArrivalProcess arrivalProcess;
+    /** All service points (8 stations; see class javadoc for index mapping). */
     private ServicePoint[] servicePoints;
+    /** Number of configured service points (always 8 in this model). */
     private final int SERVICE_POINT_COUNT;
+    /** Initial line counts per station; saved with the run results. */
     private final int[] initialLineCounts;
-    public static final boolean TEXTDEMO = false; // set false to get more realistic simulation case
+    public static final boolean TEXTDEMO = false;
+    /** If {@code true} in text demo mode, use fixed inter-arrival times. */
     public static final boolean FIXEDARRIVALTIMES = false;
+    /** If {@code true} in text demo mode, use fixed service times (note: field name contains a typo). */
     public static final boolean FXIEDSERVICETIMES = false;
+    /** DAO for persisting per-run queue statistics. */
     private RunStatisticsDao runStatisticsDao=new RunStatisticsDao();
+    /** DAO for persisting run configuration (line counts). */
     private RunDao runDao = new RunDao();
 
     /**
      * Default constructor keeps previous defaults.
+     * @param controller UI/controller callback interface used for visualization updates
      */
     public MyEngine(IControllerMtoV controller) {
         this(controller, new int[]{1,1,1,1,1,1,1,1});
@@ -38,6 +81,10 @@ public class MyEngine extends Engine {
     /**
      * New constructor: accept line counts for each service point.
      * Expects an array of length 8 (the rest of the code assumes 8 service points).
+     * @param controller UI/controller callback interface used for visualization updates
+     * @param lineCounts array of length 8 containing the number of parallel lines (servers)
+     * for each station; see class javadoc for index mapping
+     * @throws IllegalArgumentException if {@code lineCounts} is {@code null} or its length is not 8
      */
     public MyEngine(IControllerMtoV controller, int[] lineCounts) {
         super(controller);
@@ -100,11 +147,26 @@ public class MyEngine extends Engine {
         }
     }
 
+    /**
+     * A-phase: schedules the very first arrival into the system.
+     * Called by the {@link Engine} lifecycle when the simulation starts.
+     */
     @Override
     protected void initialization() {    // First arrival in the system
         arrivalProcess.generateNext();
     }
 
+    /**
+     * B-phase: handles a single event from the event list (routing logic and visualization side-effects).
+     * <p>
+     * For arrivals ({@link EventType#ARR1}), a new {@link Passenger} is created and routed to
+     * check-in, luggage drop, or security depending on {@link Passenger#isCheckIn()},
+     * {@link Passenger#isLuggage()} and priority status. Downstream events pop a passenger from
+     * the corresponding {@link ServicePoint} queue and route to the next station.
+     * </p>
+     *
+     * @param t the event to be processed; its type must be an {@link EventType}
+     */
     @Override
     protected void runEvent(Event t) {  // B phase events
         switch ((EventType) t.getType()) {
@@ -229,6 +291,10 @@ public class MyEngine extends Engine {
         }
     }
 
+    /**
+     * C-phase: attempts to start service on all idle lines where a queue is present.
+     * <p>Iterates through each {@link ServicePoint} and each of its parallel lines.</p>
+     */
     @Override
     protected void tryCEvents() {
         for (ServicePoint p : servicePoints) {
@@ -240,6 +306,10 @@ public class MyEngine extends Engine {
         }
     }
 
+    /**
+     * Finalization/reporting: persists run configuration and collected queue statistics,
+     * triggers result visualization, and prints the simulation end time.
+     */
     @Override
     protected void results() {
 
