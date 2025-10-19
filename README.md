@@ -63,7 +63,7 @@ mvn javafx:run
 src/main/resources/META-INF/persistence.xml
 ```
 ```xml
-<property name="jakarta.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/airportdb"/>
+<property name="jakarta.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/airport_simulator"/>
 <property name="jakarta.persistence.jdbc.user" value="appuser"/>
 <property name="jakarta.persistence.jdbc.password" value="password"/>
 ```
