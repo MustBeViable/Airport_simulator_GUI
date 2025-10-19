@@ -1,4 +1,4 @@
-package simu.entity;
+package simu.model.entity;
 
 import jakarta.persistence.*;
 

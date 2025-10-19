@@ -2,14 +2,13 @@ package dao;
 
 
 import jakarta.persistence.EntityManager;
-import simu.entity.Run;
+import simu.model.entity.Run;
 
-import java.util.Currency;
 import java.util.List;
 
 /**
  * Dao class for simulation run settings.
- * Meant to save, update, find and delete Run instance {@link simu.entity.Run}
+ * Meant to save, update, find and delete Run instance {@link Run}
  * from the database.
  * @author Elias Rinne
  */
@@ -31,7 +30,7 @@ public class RunDao {
     /**
      * Method to find a specific run based on its id
      * @param id primarykey for the run that is needed to find
-     * @return Run instance {@link simu.entity.Run}
+     * @return Run instance {@link Run}
      * @author Elias Rinne
      */
     public Run find(int id) {
@@ -41,7 +40,7 @@ public class RunDao {
     }
     /**
      * Method to find all runs from the database
-     * @return List of Run instances {@link simu.entity.Run}
+     * @return List of Run instances {@link Run}
      * @author Elias Rinne
      */
     public List<Run> findAll() {

@@ -1,13 +1,13 @@
 package dao;
 
 import jakarta.persistence.EntityManager;
-import simu.entity.RunStatistics;
+import simu.model.entity.RunStatistics;
 
 import java.util.List;
 
 /**
  * Dao class for simulation run statistic settings.
- * Meant to save, update, find and delete Run instance {@link simu.entity.RunStatistics}
+ * Meant to save, update, find and delete Run instance {@link RunStatistics}
  * from the database.
  * @author Elias Rinne
  */
@@ -28,7 +28,7 @@ public class RunStatisticsDao {
     /**
      * Method to find a specific run's statistics based on its id
      * @param id primarykey for the run_statistic table that is needed to find
-     * @return Run instance {@link simu.entity.RunStatistics}
+     * @return Run instance {@link RunStatistics}
      * @author Elias Rinne
      */
 
@@ -40,7 +40,7 @@ public class RunStatisticsDao {
 
     /**
      * Method to find all runs' statistics from the database, no usages yet
-     * @return List of RunStatistic instances {@link simu.entity.RunStatistics}
+     * @return List of RunStatistic instances {@link RunStatistics}
      * @author Elias Rinne
      */
 

@@ -12,8 +12,8 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import simu.entity.Run;
-import simu.entity.RunStatistics;
+import simu.model.entity.Run;
+import simu.model.entity.RunStatistics;
 
 import java.io.IOException;
 import java.util.List;
